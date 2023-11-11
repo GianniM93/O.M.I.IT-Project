@@ -16,6 +16,7 @@ Content-Type: application/json
 {
 "firstName": "X",
 "lastName": "X",
+"nickName": "X",
 "email": "emailx@mail.it",
 "birthDate": "X",
 "password": "X"
@@ -113,3 +114,21 @@ Content-Type: application/json
 }
 
 ####
+
+GET http://localhost:5050/userId/collections
+
+####
+
+GET http://localhost:5050/collections
+
+####
+
+POST http://localhost:5050/userId/add-collection HTTP/1.1
+Content-Type: application/json
+
+{
+"gameTitle": "Y+",
+"developer": 7,
+"releaseDate": "Yes!",
+"platforms": "Yes!"
+}

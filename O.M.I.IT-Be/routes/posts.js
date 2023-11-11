@@ -51,7 +51,7 @@ posts.post('/posts/upload', upload.single('cover')  , async (req, res) => {
     } catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server" })
+            message: "Internal Server Error" })
     } })
 
 
@@ -62,11 +62,11 @@ posts.post('/posts/cloudUpload', cloudUpload.single('cover'), async (req, res) =
     } catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server" })
+            message: "Internal Server Error" })
     } })
 
 //----------------------GET---------------------
-posts.get('/posts', verifyToken, async (req, res) => {
+posts.get('/posts',  async (req, res) => {
    try {
        const posts = await PostModel.find()
           .populate('postComments')
@@ -77,7 +77,7 @@ posts.get('/posts', verifyToken, async (req, res) => {
     catch (e) {
        res.status(500).send({
            statusCode: 500,
-           message: "Errore interno del server" }) }
+           message: "Internal Server Error" }) }
 })
 
 //----------------GETbyID----------------------
@@ -97,7 +97,7 @@ posts.get('/posts/byid/:id', async (req, res) => {
     catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server" }) }
+            message: "Internal Server Error" }) }
 })
 
 //----------------GETbyTitle----------------------
@@ -114,7 +114,7 @@ posts.get('/posts/bytitle', async (req, res) => {
     } catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server" }) }
+            message: "Internal Server Error" }) }
 })
 
 
@@ -141,7 +141,7 @@ posts.post('/posts/create', validatePost, async (req, res) => {
         console.log(e)
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server" }) }
+            message: "Internal Server Error" }) }
 })
 
 //---------------------PATCH-------------------
@@ -176,7 +176,7 @@ posts.patch('/posts/update/:postId', cloudUpload.single('cover'), async (req, re
     } catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server"
+            message: "Internal Server Error"
         });
     }
 });
@@ -198,7 +198,7 @@ posts.delete('/posts/delete/:postId', async (req, res) => {
     catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server"  }) }
+            message: "Internal Server Error"  }) }
 })
 
 

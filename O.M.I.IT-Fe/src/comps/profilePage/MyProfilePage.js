@@ -38,7 +38,7 @@ const ProfilePage=()=>{
     <MyNavbar className="mb-4"  links={navLinks} />
     <p>pagina profilo</p>
     <div>
-        <h1>{userInfo.firstName} {userInfo.lastName}</h1>
+        <h1>{userInfo.firstName} "{userInfo.nickName}" {userInfo.lastName}</h1>
        <img src={userInfo.avatar}/>
     </div>
     </>

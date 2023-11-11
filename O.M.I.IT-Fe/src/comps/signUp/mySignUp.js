@@ -84,6 +84,15 @@ return (
       </Form.Group>
 
       <Form.Group className="mb-3">
+        <Form.Label>NickName</Form.Label>
+        <Form.Control type="text" placeholder="NickName" name="nickName" required
+        onChange={(e) => setFormData({
+            ...formData,
+            nickName: e.target.value
+        })}/>
+      </Form.Group>
+
+      <Form.Group className="mb-3">
         <Form.Label>email</Form.Label>
         <Form.Control type="text" placeholder="email" name="email" required
         onChange={(e) => setFormData({

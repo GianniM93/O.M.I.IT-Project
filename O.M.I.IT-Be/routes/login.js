@@ -31,9 +31,13 @@ login.post('/login', async (req, res) => {
         id: users._id,
         firstName: users.firstName,
         lastName: users.lastName,
+        nickName: users.nickName,
         email: users.email,
         birthDate: users.birthDate,
         avatar: users.avatar,
+        userCollection: users.userCollection,
+        userPosts: users.userPosts,
+        userComments: users.userComments,
     }, process.env.JWT_SECRET, {
         expiresIn: '24h'
     })

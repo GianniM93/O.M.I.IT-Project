@@ -70,7 +70,9 @@ users.post('/users/cloudUpload', cloudUpload.single('avatar'), async (req, res) 
 users.get('/users', async(req,res)=>{
 try{
     const users=await UserModel.find()
-
+       .populate('userCollection')
+       .populate('userPosts')
+       .populate('userComments')
     res.status(200).send({
         statusCode:200,
         users  }) }
@@ -109,10 +111,14 @@ users.post('/users/create', validateUser, async(req,res)=>{
     const newUser=new UserModel({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        nickName: req.body.nickName,
         email: req.body.email,
         birthDate: req.body.birthDate,
         avatar: req.body.avatar,
-        password: hashedPassword  })
+        password: hashedPassword,
+        userCollection: req.body.userCollection,
+        userPosts: req.body.userPosts,
+        userComments: req.body.userComments })
         
     try{
         const user=await newUser.save()

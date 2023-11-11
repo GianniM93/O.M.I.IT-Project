@@ -27,7 +27,7 @@ comments.get('/:postId/comments', async (req, res) => {
     } catch (e) {
       res.status(500).send({
         statusCode: 500,
-        message: "Errore interno del server"
+        message: "Internal Server Error"
       });
     }
   });
@@ -62,7 +62,7 @@ comments.get('/:postId/comments/:commentId', async (req, res) => {
     } catch (e) {
       res.status(500).send({
         statusCode: 500,
-        message: "Errore interno del server"
+        message: "Internal Server Error"
       });
     }
   });
@@ -101,7 +101,7 @@ comments.post('/:postId/add-comment', async (req, res) => {
   } catch (e) {
     res.status(500).send({
       statusCode: 500,
-      message: "Errore interno del server"
+      message: "Internal Server Error"
     });
   }
 });
@@ -142,7 +142,7 @@ comments.patch('/:postId/comments/:commentId', async (req, res) => {
     } catch (e) {
       res.status(500).send({
         statusCode: 500,
-        message: "Errore interno del server"
+        message: "Internal Server Error"
       });
     }
   });
@@ -183,7 +183,7 @@ comments.delete('/:postId/comments/:commentId', async (req, res) => {
         console.error('Errore durante la rimozione del commento:', e);
       res.status(500).send({
         statusCode: 500,
-        message: "Errore interno del server"
+        message: "Internal Server Error"
       });
     }
   });
