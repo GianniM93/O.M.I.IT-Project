@@ -1,5 +1,5 @@
 const express=require('express')
-const AuthorModel=require('../models/author')
+const AuthorModel=require('../models/user')
 const validateAuthor = require('../middlewares/validateAuthor')
 const authors=express.Router()
 const bcrypt=require('bcrypt')

@@ -1,7 +1,7 @@
 const express = require('express')
 const login = express.Router()
 const bcrypt = require('bcrypt')
-const AuthorModel = require('../models/author')
+const AuthorModel = require('../models/user')
 const jwt = require('jsonwebtoken')
 const verifyToken = require('../middlewares/verifyToken')
 require('dotenv').config()
