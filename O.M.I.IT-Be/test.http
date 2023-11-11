@@ -150,3 +150,16 @@ Content-Type: application/json
 ####
 
 DELETE http://localhost:5050/userId/collections/CollId HTTP/1.1
+
+####
+
+POST http://localhost:5050/654fa70395a0c4f1df9779d4/add-post HTTP/1.1
+Content-Type: application/json
+
+{
+"category": "backend",
+"title": "Posttest",
+"readTime": {"value":7,"unit":"years"},
+"author": {"name":"X"},
+"content": "I Love Pizza & Videogames <3"
+}

@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 
 const AddPostModal = ({ close }) => {
     const [file, setFile] = useState(null)
+    const [userInfo, setUserInfo] = useState(null);
     const [formData, setFormData] = useState({
       readTime: {
       value: "",
@@ -32,7 +33,7 @@ const AddPostModal = ({ close }) => {
             const userData = await response.json();
             console.log("Dati utente:",userData)
 
-            
+        setUserInfo(userData);   
         setFormData({
           ...formData,
           author: {
@@ -69,13 +70,17 @@ const AddPostModal = ({ close }) => {
     const onSubmit = async (e) => {
         e.preventDefault()
 
+        if (!userInfo) {
+          console.error('Dati utente non disponibili.');
+          return }
+
         if (file) {  
                 const uploadCover = await uploadFile(file)
                 console.log(uploadCover)
                 const finalBody = {
                     ...formData,
                     cover: uploadCover.cover }  
-                const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/posts/create`, {
+                const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${userInfo._id}/add-post`, {
                     headers: {
                         "Content-Type": "application/json" },
                     method: 'POST',
@@ -89,7 +94,7 @@ const AddPostModal = ({ close }) => {
         else{
               const finalBody = {
                 ...formData }  
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/posts/create`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${userInfo._id}/add-post`, {
                 headers: {
                     "Content-Type": "application/json" },
                 method: 'POST',

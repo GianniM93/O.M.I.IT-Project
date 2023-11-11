@@ -84,9 +84,9 @@ comments.post('/:postId/add-comment', async (req, res) => {
     }
 
     const newComment = new CommentModel({
-      comm: comm,
-      rate: rate, // Not Required
-      commAuthor: commAuthor
+      comm,
+      rate,
+      commAuthor
     });
 
     const savedComment = await newComment.save();
@@ -152,6 +152,7 @@ comments.patch('/:postId/comments/:commentId', async (req, res) => {
 
 comments.delete('/:postId/comments/:commentId', async (req, res) => {
     const { postId, commentId } = req.params;
+    const userId = req.user._id;
   
     try {
       const post = await PostModel.findById(postId).populate('postComments');

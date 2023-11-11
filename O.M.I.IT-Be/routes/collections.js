@@ -98,13 +98,13 @@ collections.post('/:userId/add-collection', async (req, res) => {
     }
 
     const newCollection = new CollectionModel({
-      gameTitle: gameTitle,
-      gameCover: gameCover,
-      developer: developer,
-      publisher: publisher,
-      genres: genres,
-      releaseDate: releaseDate,
-      platforms: platforms  });
+      gameTitle,
+      gameCover,
+      developer,
+      publisher,
+      genres,
+      releaseDate,
+      platforms  });
 
     const savedCollection = await newCollection.save();
     user.userCollection.push(savedCollection);

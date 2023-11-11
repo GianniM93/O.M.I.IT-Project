@@ -1,5 +1,6 @@
 const express = require('express')
 const PostModel = require('../models/post')
+const UserModel = require('../models/user')
 const validatePost = require('../middlewares/validatePost')
 const posts = express.Router()
 const multer=require('multer')
@@ -69,7 +70,7 @@ posts.post('/posts/cloudUpload', cloudUpload.single('cover'), async (req, res) =
 posts.get('/posts',  async (req, res) => {
    try {
        const posts = await PostModel.find()
-          .populate('postComments')
+       .populate('postComments')
        res.status(200)
            .send({
                statusCode: 200,
@@ -120,15 +121,16 @@ posts.get('/posts/bytitle', async (req, res) => {
 
 //------------POST--------------------------
 posts.post('/posts/create', validatePost, async (req, res) => {
+    const {category, title, cover, readTime, author, content, postComments} = req.body;
 
     const newPost = new PostModel({
-        category: req.body.category,
-        title: req.body.title,
-        cover: req.body.cover,
-        readTime:{value:req.body.readTime.value, unit:req.body.readTime.unit},
-        author:{name:req.body.author.name, avatar:req.body.author.avatar},
-        content: req.body.content,
-        postComments: req.body.postComments })
+        category,
+        title,
+        cover,
+        readTime:{value: readTime.value, unit: readTime.unit},
+        author:{name: author.name, avatar: author.avatar},
+        content,
+        postComments })
 
     try {
         const post = await newPost.save()
@@ -200,6 +202,49 @@ posts.delete('/posts/delete/:postId', async (req, res) => {
             statusCode: 500,
             message: "Internal Server Error"  }) }
 })
+
+
+//-------------------------------UserPostsPOST---------------------------------------------------------
+
+posts.post('/:userId/add-post', async (req, res) => {
+    const { userId } = req.params;
+    const {category, title, cover, readTime, author, content, postComments} = req.body;
+  
+    try {
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).send({
+          statusCode: 404,
+          message: "User not found!"
+        });
+      }
+  
+      const newPost = new PostModel({
+        category,
+        title,
+        cover,
+        readTime:{value: readTime.value, unit: readTime.unit},
+        author:{name: author.name, avatar: author.avatar},
+        content,
+        postComments })
+  
+      const savedPost = await newPost.save();
+      user.userPosts.push(savedPost);
+      await user.save();
+  
+      res.status(201).send({
+        statusCode: 201,
+        message: "Post added successfully",
+        post: savedPost
+      });
+    } catch (e) {
+        console.error(e);
+      res.status(500).send({
+        statusCode: 500,
+        message: "Internal Server Error"
+      });
+    }
+  });
 
 
 module.exports=posts

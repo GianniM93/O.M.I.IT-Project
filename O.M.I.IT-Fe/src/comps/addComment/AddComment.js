@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 
-const AddPostModal = ({infoId, close }) => {
+const AddCommentModal = ({infoId, close }) => {
     const [formData, setFormData] = useState({})
       
 
@@ -49,8 +49,14 @@ const AddPostModal = ({infoId, close }) => {
                     "Content-Type": "application/json" },
                 method: 'POST',
                 body: JSON.stringify(finalBody) })
-               return response.json() }
-            catch (error) {
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message);
+                } else {
+                    alert('An error occurred: ' + result.message) }
+
+            }catch (error) {
               console.error('Errore durante l\'invio del commento:', error);
             } }
 
@@ -78,7 +84,7 @@ const AddPostModal = ({infoId, close }) => {
       </Form.Group>
 
       <Button variant="primary mx-3 mb-3" type="submit">
-        Add Post!
+        Post Comment
       </Button>
       <Button onClick={() => close(false)}  variant="primary mb-3">
         Close
@@ -87,5 +93,5 @@ const AddPostModal = ({infoId, close }) => {
     </>
     ) };
 
-export default AddPostModal;
+export default AddCommentModal;
 
