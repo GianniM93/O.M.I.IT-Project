@@ -3,7 +3,7 @@ const mongoose=require('mongoose');
 require('dotenv').config()
 const PORT=5050;
 const postsRoute=require('./routes/posts');
-const authorsRoute=require('./routes/authors');
+const usersRoute=require('./routes/users');
 const commentsRoute=require('./routes/comments');
 const emailRoute=require('./routes/sendEmail')
 const loginRoute=require('./routes/login')
@@ -23,7 +23,7 @@ app.use(logger)
 
 /*Routes*/
 app.use('/',postsRoute)
-app.use('/',authorsRoute)
+app.use('/',usersRoute)
 app.use('/',commentsRoute)
 app.use('/',emailRoute)
 app.use('/',loginRoute)

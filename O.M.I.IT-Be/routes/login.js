@@ -1,23 +1,23 @@
 const express = require('express')
 const login = express.Router()
 const bcrypt = require('bcrypt')
-const AuthorModel = require('../models/user')
+const UserModel = require('../models/user')
 const jwt = require('jsonwebtoken')
 const verifyToken = require('../middlewares/verifyToken')
 require('dotenv').config()
 
 
 login.post('/login', async (req, res) => {
-    const authors = await AuthorModel.findOne({ email: req.body.email })
+    const users = await UserModel.findOne({ email: req.body.email })
 
-    if (!authors) {
+    if (!users) {
         return res.status(404).send({
             message: 'Nome utente errato o inesistente',
             statusCode: 404
         })
     }
 
-    const validPassword = await bcrypt.compare(req.body.password, authors.password)
+    const validPassword = await bcrypt.compare(req.body.password, users.password)
 
     if (!validPassword) {
         return res.status(400).send({
@@ -28,12 +28,12 @@ login.post('/login', async (req, res) => {
 
     // generazione token
     const token = jwt.sign({
-        id: authors._id,
-        firstName: authors.firstName,
-        lastName: authors.lastName,
-        email: authors.email,
-        birthDate: authors.birthDate,
-        avatar: authors.avatar,
+        id: users._id,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        email: users.email,
+        birthDate: users.birthDate,
+        avatar: users.avatar,
     }, process.env.JWT_SECRET, {
         expiresIn: '24h'
     })
@@ -51,7 +51,7 @@ login.get('/me', verifyToken, async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const user = await AuthorModel.findById(userId);
+        const user = await UserModel.findById(userId);
         if (!user) {
             return res.status(404).send({
                 message: 'Utente non trovato',

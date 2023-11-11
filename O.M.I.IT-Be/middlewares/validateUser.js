@@ -1,4 +1,4 @@
-const validateAuthor = (req, res, next) => {
+const validateUser = (req, res, next) => {
     const errors = []
 
     const {firstName,lastName,email,birthDate} = req.body;
@@ -20,4 +20,4 @@ const validateAuthor = (req, res, next) => {
     } else {
         next() } }
 
-module.exports = validateAuthor
+module.exports = validateUser

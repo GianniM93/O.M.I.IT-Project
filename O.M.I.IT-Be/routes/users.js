@@ -1,7 +1,7 @@
 const express=require('express')
-const AuthorModel=require('../models/user')
-const validateAuthor = require('../middlewares/validateAuthor')
-const authors=express.Router()
+const UserModel=require('../models/user')
+const validateUser = require('../middlewares/validateUser')
+const users=express.Router()
 const bcrypt=require('bcrypt')
 const multer=require('multer')
 const cloudinary=require('cloudinary').v2
@@ -42,7 +42,7 @@ const cloudUpload = multer({storage:cloudStorage})
 
 
 //-------------------------LocalPost/Avatar-----------------------------------------
-authors.post('/authors/upload', upload.single('avatar')  , async (req, res) => {
+users.post('/users/upload', upload.single('avatar')  , async (req, res) => {
     const url = `${req.protocol}://${req.get('host')}` // http://localhost:5050
     console.log(req.file)
 
@@ -57,7 +57,7 @@ authors.post('/authors/upload', upload.single('avatar')  , async (req, res) => {
 
 
 //-----------------------CloudPost/Avatar---------------------------------------------
-authors.post('/authors/cloudUpload', cloudUpload.single('avatar'), async (req, res) => {
+users.post('/users/cloudUpload', cloudUpload.single('avatar'), async (req, res) => {
     try {
         res.status(200).json({ avatar: req.file.path })
     } catch (e) {
@@ -67,13 +67,13 @@ authors.post('/authors/cloudUpload', cloudUpload.single('avatar'), async (req, r
     } })
 
 //---------------GET---------------------------------
-authors.get('/authors', async(req,res)=>{
+users.get('/users', async(req,res)=>{
 try{
-    const authors=await AuthorModel.find()
+    const users=await UserModel.find()
 
     res.status(200).send({
         statusCode:200,
-        authors  }) }
+        users  }) }
 catch(e){
     res.status(500).send({
         statusCode:500,
@@ -82,18 +82,18 @@ catch(e){
 
 //---------------GETbyID---------------------------------
 
-authors.get('/authors/byid/:authorId', async(req,res)=>{
-    const{authorId}=req.params;
+users.get('/users/byid/:userId', async(req,res)=>{
+    const{userId}=req.params;
 
     try{
-        const authors=await AuthorModel.findById(authorId)
-        if(!authors){
+        const users=await UserModel.findById(userId)
+        if(!users){
             return res.status(404).send({
                 statusCode: 404,
-                message: "Author not found!" }) }
+                message: "User not found!" }) }
         res.status(200).send({
                 statusCode: 200,
-                authors  }) }
+                users  }) }
     catch(e){
         res.status(500).send({
             statusCode: 500,
@@ -101,12 +101,12 @@ authors.get('/authors/byid/:authorId', async(req,res)=>{
 })
 
 //------------------POST-----------------------------------------
-authors.post('/authors/create', validateAuthor, async(req,res)=>{
+users.post('/users/create', validateUser, async(req,res)=>{
 
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
-    const newAuthor=new AuthorModel({
+    const newUser=new UserModel({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
@@ -115,12 +115,12 @@ authors.post('/authors/create', validateAuthor, async(req,res)=>{
         password: hashedPassword  })
         
     try{
-        const author=await newAuthor.save()
+        const user=await newUser.save()
 
         res.status(201).send({
             statusCode:201,
-            message:"New Author Created!",
-            payload: author  }) }
+            message:"New User Created!",
+            payload: user  }) }
             
         catch(e){
             res.status(500).send({
@@ -129,21 +129,21 @@ authors.post('/authors/create', validateAuthor, async(req,res)=>{
 })
 
 //---------------------DELETE-----------------------------
-authors.delete('/authors/delete/:authorId', async (req, res) => {
-    const { authorId } = req.params;
+users.delete('/users/delete/:userId', async (req, res) => {
+    const { userId } = req.params;
 
     try {
-        const author = await AuthorModel.findByIdAndDelete(authorId)
-        if (!author) {
+        const user = await UserModel.findByIdAndDelete(userId)
+        if (!user) {
             return res.status(404).send({
                 statusCode: 404,
-                message: "Author not found or already deleted!"
+                message: "User not found or already deleted!"
             })
         }
 
         res.status(200).send({
             statusCode: 200,
-            message: "Author deleted successfully"
+            message: "User deleted successfully"
         })
 
     } catch (e) {
@@ -155,14 +155,14 @@ authors.delete('/authors/delete/:authorId', async (req, res) => {
 
 //---------------------Patch-----------------------------
 
-authors.patch('/authors/update/:authorId', cloudUpload.single('avatar'), async(req,res)=>{
-    const{authorId}=req.params;
-    const authorExist=await AuthorModel.findById(authorId)
+users.patch('/users/update/:userId', cloudUpload.single('avatar'), async(req,res)=>{
+    const{userId}=req.params;
+    const userExist=await UserModel.findById(userId)
 
-    if(!authorExist){
+    if(!userExist){
         return res.status(404).send({
             statusCode:404,
-            message:"This Author does not exist!" }) }
+            message:"This User does not exist!" }) }
 
     try{
         const dataToUpdate=req.body;
@@ -173,11 +173,11 @@ authors.patch('/authors/update/:authorId', cloudUpload.single('avatar'), async(r
             dataToUpdate.avatar = imageUrl }
 
         const options={new:true};
-        const result=await AuthorModel.findByIdAndUpdate(authorId,dataToUpdate,options)
+        const result=await UserModel.findByIdAndUpdate(userId,dataToUpdate,options)
 
         res.status(200).send({
             statusCode: 200,
-            message: "Author updated successfully",
+            message: "User updated successfully",
             result   }) }
     
     catch(e){
@@ -187,4 +187,4 @@ authors.patch('/authors/update/:authorId', cloudUpload.single('avatar'), async(r
             message: "Server Internal Error!" }) }
 })
 
-module.exports=authors
+module.exports=users

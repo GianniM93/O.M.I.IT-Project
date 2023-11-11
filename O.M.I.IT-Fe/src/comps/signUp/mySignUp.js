@@ -14,7 +14,7 @@ const uploadFile = async (avatar) => {
     const fileData = new FormData()
     fileData.append('avatar', avatar)
     try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/authors/cloudUpload`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/users/cloudUpload`, {
             method: "POST",
             body: fileData
         })
@@ -32,7 +32,7 @@ const onSubmit = async (e) => {
             const finalBody = {
                 ...formData,
                 avatar: uploadAvatar.avatar }
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/authors/create`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/users/create`, {
                 headers: {
                     "Content-Type": "application/json" },
                 method: 'POST',
@@ -48,7 +48,7 @@ const onSubmit = async (e) => {
       try {
         const finalBody = {
             ...formData }
-        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/authors/create`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/users/create`, {
             headers: {
                 "Content-Type": "application/json" },
             method: 'POST',
