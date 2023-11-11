@@ -26,6 +26,7 @@ const AddCommentModal = ({infoId, close }) => {
             
         setFormData({
           ...formData,
+            commCreator: userData._id,
             commAuthor: `${userData.firstName} ${userData.lastName}`});
             
       } catch (error) {

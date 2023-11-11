@@ -198,6 +198,7 @@ posts.delete('/posts/delete/:postId', async (req, res) => {
             statusCode: 200,
             message: "Post deleted successfully"  }) } 
     catch (e) {
+        console.log(e)
         res.status(500).send({
             statusCode: 500,
             message: "Internal Server Error"  }) }

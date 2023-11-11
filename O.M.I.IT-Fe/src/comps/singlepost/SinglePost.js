@@ -58,7 +58,7 @@ return (
  {isModalOpen && (<AddComment infoId={id} infoName={name} close={setIsModalOpen} /> )}
   </Modal.Header>
   <Modal.Body>
-  <CommentList comments={postComments} />
+  <CommentList infoId={id} comments={postComments} />
   </Modal.Body>
   <Modal.Footer>
     <Button variant="secondary" onClick={handleCloseModal}>

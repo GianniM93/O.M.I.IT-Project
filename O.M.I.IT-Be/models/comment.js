@@ -10,6 +10,9 @@ const CommentSchema= new mongoose.Schema({
     commAuthor: {
         type: String,
         required: true },
+    commCreator: {
+        type: String,
+        required: false }
     },{ timestamps: true, strict: true} )
 
     module.exports=mongoose.model('commentModel',CommentSchema,'u-comments')

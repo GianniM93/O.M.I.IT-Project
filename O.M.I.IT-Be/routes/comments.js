@@ -72,7 +72,7 @@ comments.get('/:postId/comments/:commentId', async (req, res) => {
 
 comments.post('/:postId/add-comment', async (req, res) => {
   const { postId } = req.params;
-  const { comm, rate, commAuthor } = req.body;
+  const { comm,rate,commAuthor,commCreator } = req.body;
 
   try {
     const post = await PostModel.findById(postId);
@@ -86,7 +86,8 @@ comments.post('/:postId/add-comment', async (req, res) => {
     const newComment = new CommentModel({
       comm,
       rate,
-      commAuthor
+      commAuthor,
+      commCreator
     });
 
     const savedComment = await newComment.save();
@@ -150,9 +151,9 @@ comments.patch('/:postId/comments/:commentId', async (req, res) => {
 
 //------------------DELETE------------------
 
-comments.delete('/:postId/comments/:commentId', async (req, res) => {
+comments.delete('/:postId/comments/:commentId', verifyToken, async (req, res) => {
     const { postId, commentId } = req.params;
-    const userId = req.user._id;
+    const userId = req.user.id;
   
     try {
       const post = await PostModel.findById(postId).populate('postComments');
@@ -170,6 +171,16 @@ comments.delete('/:postId/comments/:commentId', async (req, res) => {
           message: "Comment not found!"
         });
       }
+
+      // Verifica che l'utente autenticato sia l'autore del commento
+      if (comment.commCreator.toString() !== userId.toString()) {
+        return res.status(403).send({
+            statusCode: 403,
+            message: "Unauthorized to delete this comment"
+        });
+      }
+
+
   
       // Rimuovi il commento dal post e dal database
       post.postComments.pull(comment);
