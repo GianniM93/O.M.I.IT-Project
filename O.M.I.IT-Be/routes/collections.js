@@ -162,6 +162,7 @@ collections.patch('/:userId/collections/:collectionId', async (req, res) => {
         collection
       });
     } catch (e) {
+        console.error(e);
       res.status(500).send({
         statusCode: 500,
         message: "Internal Server Error"
