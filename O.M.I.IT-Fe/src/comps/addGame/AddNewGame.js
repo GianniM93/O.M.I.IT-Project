@@ -3,16 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 
-const AddPostModal = ({ close }) => {
+const AddNewGame = ({ close }) => {
     const [file, setFile] = useState(null)
     const [userInfo, setUserInfo] = useState(null);
-    const [formData, setFormData] = useState({
-      readTime: {
-      value: "",
-      unit: "" },
-    author:{
-      name:"",
-    avatar:"" } } )
+    const [formData, setFormData] = useState({})
       
 
       useEffect(() => {
@@ -29,34 +23,30 @@ const AddPostModal = ({ close }) => {
               throw new Error('Errore nella richiesta') }
     
             const userData = await response.json();
-            console.log("Dati utente:",userData)
+            //console.log("Dati utente:",userData)
 
         setUserInfo(userData);   
         setFormData({
           ...formData,
-          postCreator: userData._id,
-          author: {
-            name: `${userData.firstName} ${userData.lastName}`,
-            avatar: userData.avatar },
-        });
+          collCreator: userData._id });
             
       } catch (error) {
         console.error('Errore durante il recupero dei dati utente:', error);
       } };
 
     fetchUserData();
-  }, []); // L'array vuoto indica che questa chiamata effettuerà la richiesta solo una volta
+  }, []);
 
 
     const onChangeSetFile = (e) => {
         setFile(e.target.files[0]) }
 
-    const uploadFile = async (cover) => {
+    const uploadFile = async (gameCover) => {
         const fileData = new FormData()
-        fileData.append('cover', cover)
+        fileData.append('gameCover', gameCover)
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/posts/cloudUpload`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/collections/cloudUpload`, {
                 method: "POST",
                 body: fileData
             })
@@ -76,8 +66,8 @@ const AddPostModal = ({ close }) => {
                 console.log(uploadCover)
                 const finalBody = {
                     ...formData,
-                    cover: uploadCover.cover }  
-                const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${userInfo._id}/add-post`, {
+                    gameCover: uploadCover.gameCover }  
+                const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${userInfo._id}/add-collection`, {
                     headers: {
                         "Content-Type": "application/json" },
                     method: 'POST',
@@ -91,7 +81,7 @@ const AddPostModal = ({ close }) => {
         else{
               const finalBody = {
                 ...formData }  
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${userInfo._id}/add-post`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${userInfo._id}/add-collection`, {
                 headers: {
                     "Content-Type": "application/json" },
                 method: 'POST',
@@ -106,61 +96,66 @@ const AddPostModal = ({ close }) => {
 
     return (
         <>
-  <h1>Make a Post!</h1>
+  <h1>New Game!</h1>
     <Form encType="multipart/form-data" onSubmit={onSubmit}>
       
       <Form.Group className="mb-3">
-        <Form.Label>Category</Form.Label>
-        <Form.Control type="text" placeholder="Category" name="category" required
+        <Form.Label>gameTitle</Form.Label>
+        <Form.Control type="text" placeholder="gameTitle" name="gameTitle" required
          onChange={(e) => setFormData({
             ...formData,
-            category: e.target.value
+            gameTitle: e.target.value
         })}/>
     </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>Title</Form.Label>
-        <Form.Control type="text" placeholder="Title" name="title" required
+        <Form.Label>developer</Form.Label>
+        <Form.Control type="text" placeholder="developer" name="developer" required
         onChange={(e) => setFormData({
             ...formData,
-            title: e.target.value
+            developer: e.target.value
         })}/>
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>Cover</Form.Label>
-        <Form.Control type="File" placeholder="Cover" 
-        name="cover" onChange={onChangeSetFile} />
+        <Form.Label>gameCover</Form.Label>
+        <Form.Control type="File" placeholder="gameCover" 
+        name="gameCover" onChange={onChangeSetFile} />
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>ReadTime Value</Form.Label>
-        <Form.Control type="number" placeholder="ReadTime Value" name="value" 
-         onChange={(e) => setFormData({
-          ...formData,
-          readTime: {
-            ...formData.readTime,
-            value: Number(e.target.value) }
-        })}/>
-      </Form.Group>
-
-      <Form.Group className="mb-3">
-        <Form.Label>ReadTime Unit</Form.Label>
-        <Form.Control type="text" placeholder="ReadTime Unit" name="unit"
+        <Form.Label>publisher</Form.Label>
+        <Form.Control type="text" placeholder="publisher" name="publisher" required
         onChange={(e) => setFormData({
-          ...formData,
-          readTime: {
-            ...formData.readTime,
-            unit: e.target.value }
+            ...formData,
+            publisher: e.target.value
         })}/>
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>Content</Form.Label>
-        <Form.Control type="text" placeholder="Content" name="content" required
+        <Form.Label>genres</Form.Label>
+        <Form.Control type="text" placeholder="genres" name="genres" required
+        onChange={(e) => setFormData({
+            ...formData,
+            genres: e.target.value
+        })}/>
+      </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label>releaseDate</Form.Label>
+        <Form.Control type="text" placeholder="releaseDate" name="releaseDate" required
          onChange={(e) => setFormData({
             ...formData,
-            content:e.target.value
+            releaseDate:e.target.value
+        })}/>
+      </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label>platforms</Form.Label>
+        <Form.Control type="text" placeholder="platforms" name="platforms" required
+        onChange={(e) => setFormData({
+            ...formData,
+            platforms: e.target.value
         })}/>
       </Form.Group>
 
@@ -174,5 +169,5 @@ const AddPostModal = ({ close }) => {
     </>
     ) };
 
-export default AddPostModal;
+export default AddNewGame;
 

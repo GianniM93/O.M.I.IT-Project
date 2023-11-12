@@ -55,7 +55,10 @@ login.get('/me', verifyToken, async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const user = await UserModel.findById(userId);
+        const user = await UserModel.findById(userId)
+         .populate('userCollection')
+         .populate('userPosts')
+         .populate('userComments');
         if (!user) {
             return res.status(404).send({
                 message: 'Utente non trovato',

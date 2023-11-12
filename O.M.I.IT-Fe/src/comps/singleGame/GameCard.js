@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import CommentList from '../commentList/CommentList';
-import AddComment from '../addComment/AddComment';
-import './singlePost.css'
+//import Modal from 'react-bootstrap/Modal';
 
-const SinglePost = ({id,category,title,cover,value,unit,name,avatar,content,date,postComments,postCreator}) => {
-  const [showModal, setShowModal] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const GameCard = ({id,gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms,collCreator}) => {
+  //const [showModal, setShowModal] = useState(false);
+  //const [isModalOpen, setIsModalOpen] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
+  //const [formData, setFormData] = useState({});
 
   useEffect(() => {
     // Funzione per ottenere i dettagli dell'utente collegato
@@ -22,9 +20,7 @@ const SinglePost = ({id,category,title,cover,value,unit,name,avatar,content,date
         });
 
         if (!response.ok) {
-          
-          throw new Error('Errore nella richiesta');
-        }
+          throw new Error('Errore nella richiesta') }
 
         const userData = await response.json();
         setUserInfo(userData);
@@ -40,10 +36,10 @@ fetchUserData();
 
 //-------------------------delete-----------------------------------
 
-const deletePost = async (postId) => {
+const deleteGame = async (gameId) => {
   try {
       const token = JSON.parse(localStorage.getItem('loggedInUser'));
-      const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${postCreator}/posts/${postId}`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${collCreator}/collections/${gameId}`, {
           method: 'DELETE',
           headers: {
               'Content-Type': 'application/json',
@@ -55,10 +51,10 @@ const deletePost = async (postId) => {
       if (response.ok) {
           // Rimuovi il post cancellato dalla lista o ricarica i post
           alert(result.message);
-          console.log('Post cancellato con successo');
+          console.log('Game cancellato con successo');
       } else {
         alert('An error occurred: ' + result.message)
-          console.error('Errore durante la cancellazione del Post') }
+          console.error('Errore durante la cancellazione del Game') }
   } catch (error) {
     alert('An error occurred: ' + error.message)
       console.error('Errore di rete:', error);
@@ -66,69 +62,63 @@ const deletePost = async (postId) => {
 //-------------------------------------------------------------------------
 
 
-  const toggleModal = () => setIsModalOpen(!isModalOpen)
+/* const toggleModal = () => setIsModalOpen(!isModalOpen)
 
   const handleShowModal = () => {
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
-    setShowModal(false);
-  };
+    setShowModal(false) };   */
 
 return (
     <div className="d-flex justify-content-center align-items-center ms-3" sm={12}>
       <Card key={id} border="primary" style={{ width: '18rem' }}>
         <div ><Card.Img className='cvr'
-          variant="top" src={cover} /></div>
+          variant="top" src={gameCover} /></div>
         <Card.Body>
-          <Card.Title>{title}</Card.Title>
+          <Card.Title>{gameTitle}</Card.Title>
           <Card.Text>
-            Category: {category}
+            Category: {genres}
           </Card.Text>
           <Card.Text>
-            Author: {name}
-          </Card.Text>
-          <div className='avt'><Card.Img  src={avatar} /></div>
-          <Card.Text>
-            Reading Time: {value} {unit}
+            Author: {developer}
           </Card.Text>
           <Card.Text>
-            Date: {date}
+            Reading Time: {publisher}
+          </Card.Text>
+          <Card.Text>
+            Date: {releaseDate}
           </Card.Text>
           <Card.Text class='text-primary'>
-           {content}
+           {platforms}
           </Card.Text>
-          <Button variant="primary" onClick={handleShowModal}>Comments</Button>
-          {postCreator === userInfo._id && (
+ {/*      <Button variant="primary" onClick={handleShowModal}>Comments</Button>   */} 
+          {collCreator === userInfo._id && (
           <Button 
-          onClick={() => deletePost(id)} 
+          onClick={() => deleteGame(id)} 
           variant="danger">
               Delete!
           </Button> )}
         </Card.Body>
       </Card>
-      <Modal show={showModal} onHide={handleCloseModal}>
+{/*      <Modal show={showModal} onHide={handleCloseModal}>
   <Modal.Header closeButton>
     <Modal.Title>Comments!</Modal.Title>
     <Button
    onClick={toggleModal}
-   variant="primary ms-3 my-3">
+   variant="primary ms-3 my-3">               
    Add Comment!
  </Button>
- {isModalOpen && (<AddComment infoId={id} infoName={name} close={setIsModalOpen} /> )}
+    {isModalOpen && (<AddComment infoId={id} infoName={name} close={setIsModalOpen} /> )} 
   </Modal.Header>
-  <Modal.Body>
-  <CommentList infoId={id} comments={postComments} />
-  </Modal.Body>
   <Modal.Footer>
     <Button variant="secondary" onClick={handleCloseModal}>
       Chiudi
     </Button>
   </Modal.Footer>
-</Modal>
+</Modal>     */} 
     </div>
-  )
-}
+  ) }
 
-export default SinglePost;
+export default GameCard;

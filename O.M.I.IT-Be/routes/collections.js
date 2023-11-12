@@ -2,8 +2,66 @@ const express=require('express')
 const CollectionModel = require('../models/collection')
 const UserModel = require('../models/user')
 const verifyToken = require('../middlewares/verifyToken')
-
 const collections=express.Router()
+const multer=require('multer')
+const cloudinary=require('cloudinary').v2
+const {CloudinaryStorage}=require('multer-storage-cloudinary')
+const crypto=require('crypto')
+require('dotenv').config()
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET })
+
+  const cloudStorage = new CloudinaryStorage({
+      cloudinary: cloudinary,
+      params: {
+          folder: 'LightEnd05',
+          format: async (req, file) => 'png',
+          public_id: (req, file) => file.name }  })
+
+
+const internalStorage=multer.diskStorage({
+  destination:(req,file,cb)=>{
+      //posizione in cui salvare i file
+      cb(null,'./public') },
+  filename:(req,file,cb)=>{
+      //generiamo un suffisso unico per il nostro file
+      const uniqueSuffix=`${Date.now()}-${crypto.randomUUID()}`
+      //recuperiamo dal tutto solo l'estensione dello stesso file
+      const fileExtension=file.originalname.split('.').pop()
+      //eseguiamo la callback col titolo completo
+      cb(null,`${file.fieldname}-${uniqueSuffix}.${fileExtension}`) }  })
+
+const upload=multer({storage:internalStorage})
+const cloudUpload = multer({storage:cloudStorage})
+
+//-------------------------LocalPost/Cover-----------------------------------------
+collections.post('/collections/upload', upload.single('gameCover')  , async (req, res) => {
+  const url = `${req.protocol}://${req.get('host')}` // http://localhost:5050
+  console.log(req.file)
+
+  try {
+      const imgUrl = req.file.filename;
+      res.status(200).json({ gameCover: `${url}/public/${imgUrl}` })
+  } catch (e) {
+      res.status(500).send({
+          statusCode: 500,
+          message: "Internal Server Error" })
+  } })
+
+//-----------------------CloudPost/Cover---------------------------------------------
+collections.post('/collections/cloudUpload', cloudUpload.single('gameCover'), async (req, res) => {
+  try {
+      res.status(200).json({ gameCover: req.file.path })
+  } catch (e) {
+      res.status(500).send({
+          statusCode: 500,
+          message: "Internal Server Error" })
+  } })
+
 
 
 //----------------------GET all C's---------------------
@@ -131,11 +189,12 @@ collections.patch('/:userId/collections/:collectionId', async (req, res) => {
 
 //------------------DELETE------------------
 
-collections.delete('/:userId/collections/:collectionId', async (req, res) => {
-    const { userId, collectionId } = req.params;
+collections.delete('/:gamerId/collections/:collectionId', verifyToken, async (req, res) => {
+    const { gamerId, collectionId } = req.params;
+    const userId = req.user.id;
   
     try {
-      const user = await UserModel.findById(userId).populate('userCollection');
+      const user = await UserModel.findById(gamerId).populate('userCollection');
       if (!user) {
         return res.status(404).send({
           statusCode: 404,
@@ -148,6 +207,12 @@ collections.delete('/:userId/collections/:collectionId', async (req, res) => {
           statusCode: 404,
           message: "Collection not found!"
         })  }
+
+      if (collection.collCreator.toString() !== userId.toString()) {
+        return res.status(403).send({
+            statusCode: 403,
+            message: "Unauthorized to delete this game"
+        }) }
   
       // Rimuovi il gioco dal user e dal database
       user.userCollection.pull(collection);
