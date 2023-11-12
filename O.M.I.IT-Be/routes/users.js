@@ -34,8 +34,7 @@ const internalStorage=multer.diskStorage({
         //recuperiamo dal tutto solo l'estensione dello stesso file
         const fileExtension=file.originalname.split('.').pop()
         //eseguiamo la callback col titolo completo
-        cb(null,`${file.fieldname}-${uniqueSuffix}.${fileExtension}`) }
-})
+        cb(null,`${file.fieldname}-${uniqueSuffix}.${fileExtension}`) }   })
 
 const upload=multer({storage:internalStorage})
 const cloudUpload = multer({storage:cloudStorage})
@@ -79,28 +78,7 @@ try{
 catch(e){
     res.status(500).send({
         statusCode:500,
-        message:'Internal Server Error'  }) }
-})
-
-//---------------GETbyID---------------------------------
-
-users.get('/users/byid/:userId', async(req,res)=>{
-    const{userId}=req.params;
-
-    try{
-        const users=await UserModel.findById(userId)
-        if(!users){
-            return res.status(404).send({
-                statusCode: 404,
-                message: "User not found!" }) }
-        res.status(200).send({
-                statusCode: 200,
-                users  }) }
-    catch(e){
-        res.status(500).send({
-            statusCode: 500,
-            message: "Errore interno del server" }) }
-})
+        message:'Internal Server Error'  }) }  })
 
 //------------------POST-----------------------------------------
 users.post('/users/create', validateUser, async(req,res)=>{
@@ -144,8 +122,7 @@ users.delete('/users/delete/:userId', async (req, res) => {
             return res.status(404).send({
                 statusCode: 404,
                 message: "User not found or already deleted!"
-            })
-        }
+            }) }
 
         res.status(200).send({
             statusCode: 200,
@@ -172,7 +149,6 @@ users.patch('/users/update/:userId', cloudUpload.single('avatar'), async(req,res
 
     try{
         const dataToUpdate=req.body;
-
         // Verifica se è stato caricato un file (immagine) e se sì, aggiorna l'URL dell'immagine
         if (req.file) {
             const imageUrl = req.file.path;

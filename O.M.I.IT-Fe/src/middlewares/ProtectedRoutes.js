@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Login from "../comps/login/MyLogin";
+import Login from "../pages/login/MyLogin";
 
 
 

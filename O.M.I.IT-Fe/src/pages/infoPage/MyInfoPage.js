@@ -1,4 +1,4 @@
-import MyNavbar from '../navbar/MyNav';
+import MyNavbar from '../../comps/navbar/MyNav';
 import { navLinks } from '../../data/myNavData';
 
 const InfoPage=()=>{

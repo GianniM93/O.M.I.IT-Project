@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import LatestPosts from "../latestPosts/LatestPosts";
+import LatestPosts from "../../comps/latestPosts/LatestPosts";
 import Button from 'react-bootstrap/Button';
-import AddPostModal from '../addPostModal/AddPostModal';
-import MyNavbar from '../navbar/MyNav';
+import AddPostModal from '../../comps/addPostModal/AddPostModal';
+import MyNavbar from '../../comps/navbar/MyNav';
 import { navLinks } from '../../data/myNavData';
 import MyFooter from '../../comps/footer/MyFooter';
 

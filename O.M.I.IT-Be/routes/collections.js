@@ -17,8 +17,7 @@ collections.get('/collections', async (req, res) => {
      catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Internal Server Error" }) }
- })
+            message: "Internal Server Error" }) }  })
 
 //----------------------GET---------------------
 
@@ -31,8 +30,7 @@ collections.get('/:userId/collections', async (req, res) => {
         return res.status(404).send({
           statusCode: 404,
           message: "User not found!"
-        });
-      }
+        })  }
   
       res.status(200).send({
         statusCode: 200,
@@ -42,43 +40,7 @@ collections.get('/:userId/collections', async (req, res) => {
       res.status(500).send({
         statusCode: 500,
         message: "Internal Server Error"
-      });
-    }
-  });
-  
-
- //----------------GETbyID----------------------
-
-collections.get('/:userId/collections/:collectionId', async (req, res) => {
-    const { userId, collectionId } = req.params;
-  
-    try {
-      const user = await UserModel.findById(userId).populate('userCollection');
-      if (!user) {
-        return res.status(404).send({
-          statusCode: 404,
-          message: "User not found!"
-        });
-      }
-  
-      const collection = user.userCollection.find((c) => c._id.toString() === collectionId);
-      if (!collection) {
-        return res.status(404).send({
-          statusCode: 404,
-          message: "collection not found!"
-        });
-      }
-  
-      res.status(200).send({
-        statusCode: 200,
-        collection
-      });
-    } catch (e) {
-      res.status(500).send({
-        statusCode: 500,
-        message: "Internal Server Error"
-      });
-    }
+      }) }
   });
   
 
@@ -86,7 +48,7 @@ collections.get('/:userId/collections/:collectionId', async (req, res) => {
 
 collections.post('/:userId/add-collection', async (req, res) => {
   const { userId } = req.params;
-  const {gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms} = req.body;
+  const {gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms,collCreator} = req.body;
 
   try {
     const user = await UserModel.findById(userId);
@@ -94,8 +56,7 @@ collections.post('/:userId/add-collection', async (req, res) => {
       return res.status(404).send({
         statusCode: 404,
         message: "User not found!"
-      });
-    }
+      }) }
 
     const newCollection = new CollectionModel({
       gameTitle,
@@ -104,7 +65,8 @@ collections.post('/:userId/add-collection', async (req, res) => {
       publisher,
       genres,
       releaseDate,
-      platforms  });
+      platforms,
+      collCreator  });
 
     const savedCollection = await newCollection.save();
     user.userCollection.push(savedCollection);
@@ -119,15 +81,14 @@ collections.post('/:userId/add-collection', async (req, res) => {
     res.status(500).send({
       statusCode: 500,
       message: "Internal Server Error"
-    });
-  }
+    }) }
 });
 
 //---------------------PATCH-------------------
 
 collections.patch('/:userId/collections/:collectionId', async (req, res) => {
     const { userId, collectionId } = req.params;
-    const {newGameTitle,newGameCover,newDeveloper,newPublisher,newGenres,newReleaseDate,newPlatforms} = req.body; // Estrai i nuovi dati del gioco dal corpo della richiesta
+    const {newGameTitle,newGameCover,newDeveloper,newPublisher,newGenres,newReleaseDate,newPlatforms,newCollCreator} = req.body; // Estrai i nuovi dati del gioco dal corpo della richiesta
   
     try {
       const user = await UserModel.findById(userId).populate('userCollection');
@@ -135,16 +96,14 @@ collections.patch('/:userId/collections/:collectionId', async (req, res) => {
         return res.status(404).send({
           statusCode: 404,
           message: "User not found!"
-        });
-      }
+        }) }
   
       const collection = user.userCollection.find((c) => c._id.toString() === collectionId);
       if (!collection) {
         return res.status(404).send({
           statusCode: 404,
           message: "Collection not found!"
-        });
-      }
+        }) }
   
       // Aggiorna i dati del gioco con i nuovi valori
       collection.gameTitle = newGameTitle;
@@ -166,8 +125,7 @@ collections.patch('/:userId/collections/:collectionId', async (req, res) => {
       res.status(500).send({
         statusCode: 500,
         message: "Internal Server Error"
-      });
-    }
+      }) }
   });
   
 
@@ -182,16 +140,14 @@ collections.delete('/:userId/collections/:collectionId', async (req, res) => {
         return res.status(404).send({
           statusCode: 404,
           message: "User not found!"
-        });
-      }
+        })  }
   
       const collection = user.userCollection.find((c) => c._id.toString() === collectionId);
       if (!collection) {
         return res.status(404).send({
           statusCode: 404,
           message: "Collection not found!"
-        });
-      }
+        })  }
   
       // Rimuovi il gioco dal user e dal database
       user.userCollection.pull(collection);
@@ -207,9 +163,7 @@ collections.delete('/:userId/collections/:collectionId', async (req, res) => {
       res.status(500).send({
         statusCode: 500,
         message: "Internal Server Error"
-      });
-    }
+      })  }
   });
   
-
 module.exports=collections

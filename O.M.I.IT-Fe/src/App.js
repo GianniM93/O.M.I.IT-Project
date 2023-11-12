@@ -1,14 +1,14 @@
 // App.js
 import React, { Component } from 'react';
 import Welcome from './comps/jumbotron/MyJumbo';
-import Main from './comps/main/Main';
+import Main from './pages/mainPage/MyMainPage';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./comps/login/MyLogin";
-import SignUp from "./comps/signUp/mySignUp";
+import Login from "./pages/login/MyLogin";
+import SignUp from "./pages/signUp/MySignUp";
 import ProtectedRoutes from "./middlewares/ProtectedRoutes";
 import Success from "./comps/ghSuccess/Success"
-import InfoPage from './comps/infoPage/InfoPage';
-import ProfilePage from './comps/profilePage/MyProfilePage';
+import InfoPage from './pages/infoPage/MyInfoPage';
+import ProfilePage from './pages/profilePage/MyProfilePage';
 
 class App extends Component {
   constructor(props) {

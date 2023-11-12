@@ -4,12 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Container, Row, Col } from 'react-bootstrap';
 
-
 const Login = () => {
     const [loginData, setLoginData] = useState({})
-    const [login, setLogin] = useState(null)
     
-
     const navigate = useNavigate()
 
     const handleInputChange = (e) => {
@@ -18,8 +15,7 @@ const Login = () => {
         setLoginData({
             ...loginData,
             [name]:value
-        })
-    }
+        }) }
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -27,8 +23,7 @@ const Login = () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/login`, {
                 headers: {
-                    "Content-Type": "application/json"
-                },
+                    "Content-Type": "application/json" },
                 method: 'POST',
                 body: JSON.stringify(loginData)
             })
@@ -38,11 +33,9 @@ const Login = () => {
                 localStorage.setItem('loggedInUser', JSON.stringify(data.token))
                 navigate('/home') }
             
-            setLogin(data)
-            alert(login.message)
-            console.log(login.message)
+            else{alert(data.message)}
         } catch (error) {
-            console.log(error);
+            console.log(error, 'error');
         } }
 
   const redirectForLoginWithGithub = () => {

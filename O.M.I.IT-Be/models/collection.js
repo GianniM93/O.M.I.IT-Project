@@ -22,6 +22,9 @@ const CollectionSchema= new mongoose.Schema({
     platforms: {
         type: String,
         required: true },
+    collCreator: {
+        type: String,
+        required: false }
     },{ timestamps: true, strict: true} )
 
     module.exports=mongoose.model('collectionModel',CollectionSchema,'u-collection')

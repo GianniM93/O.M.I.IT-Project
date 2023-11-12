@@ -1,12 +1,12 @@
 import React, {useState,useEffect} from 'react';
-import MyNavbar from '../navbar/MyNav';
+import MyNavbar from '../../comps/navbar/MyNav';
 import { navLinks } from '../../data/myNavData';
 
 const ProfilePage=()=>{
     const [userInfo, setUserInfo] = useState([]);
 
+//-------------------------LoggedUser--------------------------------------------------------
     useEffect(() => {
-        // Funzione per ottenere i dettagli dell'utente collegato
         const fetchUserData = async () => {
           try {
             const token = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -16,22 +16,17 @@ const ProfilePage=()=>{
             });
     
             if (!response.ok) {
-              
-              throw new Error('Errore nella richiesta');
-            }
+              throw new Error('Errore nella richiesta') }
     
             const userData = await response.json();
             setUserInfo(userData);
-            console.log("Dati utente:",userData)
-
-            
+            //console.log("Dati utente:",userData) 
       } catch (error) {
         console.error('Errore durante il recupero dei dati utente:', error);
-      }
-    };
-
+      } };
     fetchUserData();
   }, []);
+//------------------------------------------------------------------------------
 
     return (
     <>
@@ -39,7 +34,7 @@ const ProfilePage=()=>{
     <p>pagina profilo</p>
     <div>
         <h1>{userInfo.firstName} "{userInfo.nickName}" {userInfo.lastName}</h1>
-       <img src={userInfo.avatar}/>
+       <img src={userInfo.avatar} alt=''/>
     </div>
     </>
     )}

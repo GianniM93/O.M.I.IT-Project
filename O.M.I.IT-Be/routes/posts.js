@@ -34,12 +34,10 @@ const internalStorage=multer.diskStorage({
         //recuperiamo dal tutto solo l'estensione dello stesso file
         const fileExtension=file.originalname.split('.').pop()
         //eseguiamo la callback col titolo completo
-        cb(null,`${file.fieldname}-${uniqueSuffix}.${fileExtension}`) }
-})
+        cb(null,`${file.fieldname}-${uniqueSuffix}.${fileExtension}`) }  })
 
 const upload=multer({storage:internalStorage})
 const cloudUpload = multer({storage:cloudStorage})
-
 
 //-------------------------LocalPost/Cover-----------------------------------------
 posts.post('/posts/upload', upload.single('cover')  , async (req, res) => {
@@ -54,7 +52,6 @@ posts.post('/posts/upload', upload.single('cover')  , async (req, res) => {
             statusCode: 500,
             message: "Internal Server Error" })
     } })
-
 
 //-----------------------CloudPost/Cover---------------------------------------------
 posts.post('/posts/cloudUpload', cloudUpload.single('cover'), async (req, res) => {
@@ -78,73 +75,7 @@ posts.get('/posts',  async (req, res) => {
     catch (e) {
        res.status(500).send({
            statusCode: 500,
-           message: "Internal Server Error" }) }
-})
-
-//----------------GETbyID----------------------
-posts.get('/posts/byid/:id', async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const posts = await PostModel.findById(id)
-        if (!posts) {
-            return res.status(404).send({
-                statusCode: 404,
-                message: "Post not found!"  }) }
-
-        res.status(200).send({
-            statusCode: 200,
-            posts  }) } 
-    catch (e) {
-        res.status(500).send({
-            statusCode: 500,
-            message: "Internal Server Error" }) }
-})
-
-//----------------GETbyTitle----------------------
-
-posts.get('/posts/bytitle', async (req, res) => {
-    const { title } = req.query;
-    try {
-        const postByTitle = await PostModel.find({
-            title: {
-                $regex: title,
-                $options: 'i' } })
-
-    res.status(200).send(postByTitle)
-    } catch (e) {
-        res.status(500).send({
-            statusCode: 500,
-            message: "Internal Server Error" }) }
-})
-
-
-//------------POST--------------------------
-posts.post('/posts/create', validatePost, async (req, res) => {
-    const {category, title, cover, readTime, author, content, postComments} = req.body;
-
-    const newPost = new PostModel({
-        category,
-        title,
-        cover,
-        readTime:{value: readTime.value, unit: readTime.unit},
-        author:{name: author.name, avatar: author.avatar},
-        content,
-        postComments })
-
-    try {
-        const post = await newPost.save()
-
-        res.status(201).send({
-            statusCode: 201,
-            message: "Post saved successfully",
-            payload: post  }) } 
-    catch (e) {
-        console.log(e)
-        res.status(500).send({
-            statusCode: 500,
-            message: "Internal Server Error" }) }
-})
+           message: "Internal Server Error" })}  })
 
 //---------------------PATCH-------------------
 posts.patch('/posts/update/:postId', cloudUpload.single('cover'), async (req, res) => {
@@ -160,7 +91,6 @@ posts.patch('/posts/update/:postId', cloudUpload.single('cover'), async (req, re
 
     try {
         let dataToUpdate = req.body;
-
         // Verifica se è stato caricato un file (immagine) e se sì, aggiorna l'URL dell'immagine
         if (req.file) {
             const imageUrl = req.file.path;
@@ -179,35 +109,12 @@ posts.patch('/posts/update/:postId', cloudUpload.single('cover'), async (req, re
         res.status(500).send({
             statusCode: 500,
             message: "Internal Server Error"
-        });
-    }
+        }) }
 });
 
-//------------------DELETE------------------
-posts.delete('/posts/delete/:postId', async (req, res) => {
-    const { postId } = req.params;
+//-------------------------------POST-----------------------------------------------------
 
-    try {
-        const post = await PostModel.findByIdAndDelete(postId)
-        if (!post) {
-            return res.status(404).send({
-                statusCode: 404,
-                message: "Post not found or already deleted!"  }) }
-
-        res.status(200).send({
-            statusCode: 200,
-            message: "Post deleted successfully"  }) } 
-    catch (e) {
-        console.log(e)
-        res.status(500).send({
-            statusCode: 500,
-            message: "Internal Server Error"  }) }
-})
-
-
-//-------------------------------POSTuserPosts-----------------------------------------------------
-
-posts.post('/:userId/add-post', async (req, res) => {
+posts.post('/:userId/add-post', validatePost, async (req, res) => {
     const { userId } = req.params;
     const {category,title,cover,readTime,author,content,postComments,postCreator} = req.body;
   
@@ -217,8 +124,7 @@ posts.post('/:userId/add-post', async (req, res) => {
         return res.status(404).send({
           statusCode: 404,
           message: "User not found!"
-        });
-      }
+        })  }
   
       const newPost = new PostModel({
         category,
@@ -244,13 +150,10 @@ posts.post('/:userId/add-post', async (req, res) => {
       res.status(500).send({
         statusCode: 500,
         message: "Internal Server Error"
-      });
-    }
+      }) }
   });
 
-
-
-  //------------------DELETEuserPosts-------------------------------------------------
+  //------------------DELETE-------------------------------------------------
 
 posts.delete('/:posterId/posts/:postId', verifyToken, async (req, res) => {
     const { posterId, postId } = req.params;
@@ -262,27 +165,22 @@ posts.delete('/:posterId/posts/:postId', verifyToken, async (req, res) => {
         return res.status(404).send({
           statusCode: 404,
           message: "User not found!"
-        });
-      }
+        })   }
   
       const post = user.userPosts.find((c) => c._id.toString() === postId);
       if (!post) {
         return res.status(404).send({
           statusCode: 404,
           message: "Post not found!"
-        });
-      }
+        })   }
 
       // Verifica che l'utente autenticato sia l'autore del commento
       if (post.postCreator.toString() !== userId.toString()) {
         return res.status(403).send({
             statusCode: 403,
             message: "Unauthorized to delete this post"
-        });
-      }
+        }) }
 
-
-  
       // Rimuovi il commento dal post e dal database
       user.userPosts.pull(post);
       await post.deleteOne();
@@ -297,8 +195,7 @@ posts.delete('/:posterId/posts/:postId', verifyToken, async (req, res) => {
       res.status(500).send({
         statusCode: 500,
         message: "Internal Server Error"
-      });
-    }
+      })  }
   });
 
 
