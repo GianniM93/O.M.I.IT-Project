@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -6,9 +6,65 @@ import CommentList from '../commentList/CommentList';
 import AddComment from '../addComment/AddComment';
 import './singlePost.css'
 
-const SingleBook = ({ id, category, title, cover, value, unit, name, avatar, content, date, postComments }) => {
+const SingleBook = ({id,category,title,cover,value,unit,name,avatar,content,date,postComments,postCreator}) => {
   const [showModal, setShowModal] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState([]);
+
+  useEffect(() => {
+    // Funzione per ottenere i dettagli dell'utente collegato
+    const fetchUserData = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
+          headers: {'loggedInUser': token },
+        });
+
+        if (!response.ok) {
+          
+          throw new Error('Errore nella richiesta');
+        }
+
+        const userData = await response.json();
+        setUserInfo(userData);
+        //console.log("Dati utente:",userData)
+
+        
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati utente:', error);
+  } };
+
+fetchUserData();
+}, []);
+
+//-------------------------delete-----------------------------------
+
+const deletePost = async (postId) => {
+  try {
+      const token = JSON.parse(localStorage.getItem('loggedInUser'));
+      const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${postCreator}/posts/${postId}`, {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+              'loggedInUser': token
+          }
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+          // Rimuovi il post cancellato dalla lista o ricarica i post
+          alert(result.message);
+          console.log('Post cancellato con successo');
+      } else {
+        alert('An error occurred: ' + result.message)
+          console.error('Errore durante la cancellazione del Post') }
+  } catch (error) {
+    alert('An error occurred: ' + error.message)
+      console.error('Errore di rete:', error);
+  } };
+//-------------------------------------------------------------------------
+
 
   const toggleModal = () => setIsModalOpen(!isModalOpen)
 
@@ -44,7 +100,12 @@ return (
            {content}
           </Card.Text>
           <Button variant="primary" onClick={handleShowModal}>Comments</Button>
-          <Button variant="danger">Delete!</Button>
+          {postCreator === userInfo._id && (
+          <Button 
+          onClick={() => deletePost(id)} 
+          variant="danger">
+              Delete!
+          </Button> )}
         </Card.Body>
       </Card>
       <Modal show={showModal} onHide={handleCloseModal}>

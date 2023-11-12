@@ -62,6 +62,7 @@ const LatestRelease = ({ appQuery }) => {
                 content={post.content}
                 date={post.createdAt}
                 postComments={post.postComments}
+                postCreator={post.postCreator}
               />
             ))}
           </Col>

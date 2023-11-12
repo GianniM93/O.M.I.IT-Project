@@ -36,6 +36,7 @@ const AddPostModal = ({ close }) => {
         setUserInfo(userData);   
         setFormData({
           ...formData,
+          postCreator: userData._id,
           author: {
             name: `${userData.firstName} ${userData.lastName}`,
             avatar: userData.avatar,

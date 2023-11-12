@@ -27,8 +27,7 @@ const CommentList = ({ comments, infoId }) => {
             
       } catch (error) {
         console.error('Errore durante il recupero dei dati utente:', error);
-      }
-    };
+      } };
 
     fetchUserData();
   }, []);
@@ -69,8 +68,7 @@ const CommentList = ({ comments, infoId }) => {
     onClick={() => deleteComment(comment._id)} 
     variant="danger">
         Delete!
-    </Button>
-)}
+    </Button> )}
 
   </li> ))}
       </ul>

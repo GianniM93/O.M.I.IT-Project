@@ -30,7 +30,10 @@ const PostSchema= new mongoose.Schema({
     postComments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'commentModel',
-        required: false }]   
+        required: false }],
+    postCreator: {
+        type: String,
+        required: false }  
 },{ timestamps: true, strict: true} )
 
     module.exports=mongoose.model('postModel',PostSchema,'u-posts')

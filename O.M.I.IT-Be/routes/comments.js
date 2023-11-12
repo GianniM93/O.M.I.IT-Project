@@ -192,7 +192,7 @@ comments.delete('/:postId/comments/:commentId', verifyToken, async (req, res) =>
         message: "Comment deleted successfully"
       });
     } catch (e) {
-        console.error('Errore durante la rimozione del commento:', e);
+        console.error('Error while deleting Comment:', e);
       res.status(500).send({
         statusCode: 500,
         message: "Internal Server Error"

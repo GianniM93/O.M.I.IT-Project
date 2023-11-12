@@ -205,11 +205,11 @@ posts.delete('/posts/delete/:postId', async (req, res) => {
 })
 
 
-//-------------------------------UserPostsPOST---------------------------------------------------------
+//-------------------------------POSTuserPosts-----------------------------------------------------
 
 posts.post('/:userId/add-post', async (req, res) => {
     const { userId } = req.params;
-    const {category, title, cover, readTime, author, content, postComments} = req.body;
+    const {category,title,cover,readTime,author,content,postComments,postCreator} = req.body;
   
     try {
       const user = await UserModel.findById(userId);
@@ -227,7 +227,8 @@ posts.post('/:userId/add-post', async (req, res) => {
         readTime:{value: readTime.value, unit: readTime.unit},
         author:{name: author.name, avatar: author.avatar},
         content,
-        postComments })
+        postComments,
+        postCreator })
   
       const savedPost = await newPost.save();
       user.userPosts.push(savedPost);
@@ -240,6 +241,59 @@ posts.post('/:userId/add-post', async (req, res) => {
       });
     } catch (e) {
         console.error(e);
+      res.status(500).send({
+        statusCode: 500,
+        message: "Internal Server Error"
+      });
+    }
+  });
+
+
+
+  //------------------DELETEuserPosts-------------------------------------------------
+
+posts.delete('/:posterId/posts/:postId', verifyToken, async (req, res) => {
+    const { posterId, postId } = req.params;
+    const userId = req.user.id;
+  
+    try {
+      const user = await UserModel.findById(posterId).populate('userPosts');
+      if (!user) {
+        return res.status(404).send({
+          statusCode: 404,
+          message: "User not found!"
+        });
+      }
+  
+      const post = user.userPosts.find((c) => c._id.toString() === postId);
+      if (!post) {
+        return res.status(404).send({
+          statusCode: 404,
+          message: "Post not found!"
+        });
+      }
+
+      // Verifica che l'utente autenticato sia l'autore del commento
+      if (post.postCreator.toString() !== userId.toString()) {
+        return res.status(403).send({
+            statusCode: 403,
+            message: "Unauthorized to delete this post"
+        });
+      }
+
+
+  
+      // Rimuovi il commento dal post e dal database
+      user.userPosts.pull(post);
+      await post.deleteOne();
+      await user.save();
+  
+      res.status(200).send({
+        statusCode: 200,
+        message: "Post deleted successfully"
+      });
+    } catch (e) {
+        console.error('Error while deleting Post:', e);
       res.status(500).send({
         statusCode: 500,
         message: "Internal Server Error"
