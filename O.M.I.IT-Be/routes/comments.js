@@ -69,10 +69,11 @@ comments.post('/:postId/add-comment', async (req, res) => {
 
 //---------------------PATCH-------------------
 
-comments.patch('/:postId/comments/:commentId', async (req, res) => {
+comments.patch('/:postId/comments/:commentId', verifyToken, async (req, res) => {
     const { postId, commentId } = req.params;
     const { newComm, newRating } = req.body; // Estrai i nuovi dati del commento dal corpo della richiesta
-  
+    const userId = req.user.id;
+
     try {
       const post = await PostModel.findById(postId).populate('postComments');
       if (!post) {
@@ -88,9 +89,17 @@ comments.patch('/:postId/comments/:commentId', async (req, res) => {
           message: "Comment not found!"
         }) }
   
+      // Verifica che l'utente autenticato sia l'autore del commento
+      if (comment.commCreator.toString() !== userId.toString()) {
+        return res.status(403).send({
+          statusCode: 403,
+          message: "Unauthorized to update this comment"
+        }) }
+
+        
       // Aggiorna i dati del commento con i nuovi valori
-      comment.comm = newComm;
-      comment.rate = newRating;
+      if (newComm !== undefined) comment.comm = newComm;
+      if (newRating !== undefined) comment.rate = newRating;
       await comment.save();
   
       res.status(200).send({

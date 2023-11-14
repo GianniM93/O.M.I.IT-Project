@@ -73,7 +73,7 @@ const AddPostModal = ({ close }) => {
 
         if (file) {  
                 const uploadCover = await uploadFile(file)
-                console.log(uploadCover)
+                console.log('uploadCover', uploadCover)
                 const finalBody = {
                     ...formData,
                     cover: uploadCover.cover }  

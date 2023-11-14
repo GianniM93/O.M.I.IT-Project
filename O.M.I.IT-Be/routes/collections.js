@@ -144,12 +144,13 @@ collections.post('/:userId/add-collection', async (req, res) => {
 
 //---------------------PATCH-------------------
 
-collections.patch('/:userId/collections/:collectionId', async (req, res) => {
-    const { userId, collectionId } = req.params;
-    const {newGameTitle,newGameCover,newDeveloper,newPublisher,newGenres,newReleaseDate,newPlatforms,newCollCreator} = req.body; // Estrai i nuovi dati del gioco dal corpo della richiesta
-  
+collections.patch('/:gamerId/collections/:collectionId', verifyToken, cloudUpload.single('newGameCover'), async (req, res) => {
+    const { gamerId, collectionId } = req.params;
+    const {newGameTitle,newGameCover,newDeveloper,newPublisher,newGenres,newReleaseDate,newPlatforms} = req.body;
+    const userId = req.user.id;
+
     try {
-      const user = await UserModel.findById(userId).populate('userCollection');
+      const user = await UserModel.findById(gamerId).populate('userCollection');
       if (!user) {
         return res.status(404).send({
           statusCode: 404,
@@ -163,14 +164,24 @@ collections.patch('/:userId/collections/:collectionId', async (req, res) => {
           message: "Collection not found!"
         }) }
   
+      if (collection.collCreator.toString() !== userId.toString()) {
+        return res.status(403).send({
+            statusCode: 403,
+            message: "Unauthorized to delete this game"
+        }) }
+  
+        if (req.file) {
+          const imageUrl = req.file.path;
+          newGameCover = imageUrl }
+
       // Aggiorna i dati del gioco con i nuovi valori
-      collection.gameTitle = newGameTitle;
-      collection.gameCover = newGameCover;
-      collection.developer = newDeveloper;
-      collection.publisher = newPublisher;
-      collection.genres = newGenres;
-      collection.releaseDate = newReleaseDate;
-      collection.platforms = newPlatforms;
+      if (newGameTitle !== undefined) collection.gameTitle = newGameTitle;
+      if (newGameCover !== undefined) collection.gameCover = newGameCover;
+      if (newDeveloper !== undefined) collection.developer = newDeveloper;
+      if (newPublisher !== undefined) collection.publisher = newPublisher;
+      if (newGenres !== undefined) collection.genres = newGenres;
+      if (newReleaseDate !== undefined) collection.releaseDate = newReleaseDate;
+      if (newPlatforms !== undefined) collection.platforms = newPlatforms;
       await collection.save();
   
       res.status(200).send({

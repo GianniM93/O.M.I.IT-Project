@@ -3,10 +3,12 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 //import Modal from 'react-bootstrap/Modal';
 
-const GameCard = ({id,gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms,collCreator}) => {
+const GameCard = ({game,id,gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms,collCreator}) => {
   //const [showModal, setShowModal] = useState(false);
   //const [isModalOpen, setIsModalOpen] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
+  const [editingGame, setEditingGame] = useState(null);
+  const [file, setFile] = useState(null)
   //const [formData, setFormData] = useState({});
 
   useEffect(() => {
@@ -59,15 +61,86 @@ const deleteGame = async (gameId) => {
     alert('An error occurred: ' + error.message)
       console.error('Errore di rete:', error);
   } };
-//-------------------------------------------------------------------------
+//---------------------------PATCH-------'/:gamerId/collections/:collectionId'-----------------------
+
+const startEdit = (game) => {
+  //console.log(game)
+  setEditingGame(game);
+};
+
+const onChangeSetFile = (e) => {
+  setFile(e.target.files[0]) }
+
+const uploadFile = async (gameCover) => {
+  const fileData = new FormData()
+  fileData.append('gameCover', gameCover)
+
+  try {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/collections/cloudUpload`, {
+        method: "POST",
+        body: fileData
+    })
+    return await response.json()
+} catch (error) {
+    console.log(error, 'Errore in uploadFile') } }
+
+const submitEdit = async (gameId, updatedFields) => {
+  try {
+    const token = JSON.parse(localStorage.getItem('loggedInUser'));
+    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${collCreator}/collections/${gameId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'loggedInUser': token },
+      body: JSON.stringify({
+        newGameTitle: updatedFields.gameTitle,
+        newDeveloper: updatedFields.developer,
+        newPublisher: updatedFields.publisher,
+        newGenres: updatedFields.genres,
+        newReleaseDate: updatedFields.releaseDate,
+        newPlatforms: updatedFields.platforms
+      })
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      //setEditingGame(null);
+      alert('Game updated successfully');
+    } else {
+      alert('Error: ' + result.message) }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } };
+//-----------------------------------------------------------
+
+const submitCover = async (gameId) => {
+  try {
+    const uploadCover = await uploadFile(file)
+    //console.log('uploadCover', uploadCover)
+    const token = JSON.parse(localStorage.getItem('loggedInUser'));
+    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${collCreator}/collections/${gameId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'loggedInUser': token },
+      body: JSON.stringify({
+        newGameCover: uploadCover.gameCover })
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      //setEditingGame(null);
+      alert('Game updated successfully');
+    } else {
+      alert('Error: ' + result.message) }
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  } };
 
 
 /* const toggleModal = () => setIsModalOpen(!isModalOpen)
-
   const handleShowModal = () => {
-    setShowModal(true);
-  };
-
+    setShowModal(true) };
   const handleCloseModal = () => {
     setShowModal(false) };   */
 
@@ -79,27 +152,110 @@ return (
         <Card.Body>
           <Card.Title>{gameTitle}</Card.Title>
           <Card.Text>
-            Category: {genres}
+            Genres: {genres}
           </Card.Text>
           <Card.Text>
-            Author: {developer}
+            Developer: {developer}
           </Card.Text>
           <Card.Text>
-            Reading Time: {publisher}
+            Publisher: {publisher}
           </Card.Text>
           <Card.Text>
-            Date: {releaseDate}
+            R_Date: {releaseDate}
           </Card.Text>
-          <Card.Text class='text-primary'>
-           {platforms}
+          <Card.Text>
+            Platforms: {platforms}
           </Card.Text>
  {/*      <Button variant="primary" onClick={handleShowModal}>Comments</Button>   */} 
           {collCreator === userInfo._id && (
+          <div>
           <Button 
-          onClick={() => deleteGame(id)} 
+          onClick={() => deleteGame(id)}         
           variant="danger">
               Delete!
-          </Button> )}
+          </Button> 
+          <Button 
+          onClick={() => startEdit(game)} 
+          variant="warning">
+              Edit!
+          </Button> 
+          </div> )}
+          
+          {editingGame && (
+  <div>
+    <input 
+      type="text"
+      value={editingGame.gameTitle}
+      onChange={(e) => setEditingGame({...editingGame, gameTitle: e.target.value})}
+    />
+    <button onClick={() => submitEdit(editingGame._id, { 
+      gameTitle: editingGame.gameTitle  })}>
+      Edit gameTitle
+    </button>
+
+    <input 
+      type="text"
+      value={editingGame.developer}
+      onChange={(e) => setEditingGame({...editingGame, developer: e.target.value})}
+    />
+    <button onClick={() => submitEdit(editingGame._id, {  
+      developer: editingGame.developer  })}>
+     Edit Developer
+    </button>
+
+    <input 
+      type="text"
+      value={editingGame.publisher}
+      onChange={(e) => setEditingGame({...editingGame, publisher: e.target.value})}
+    />
+    <button onClick={() => submitEdit(editingGame._id, { 
+      publisher: editingGame.publisher  })}>
+      Edit Publisher
+    </button>
+
+    <input 
+      type="text"
+      value={editingGame.genres}
+      onChange={(e) => setEditingGame({...editingGame, genres: e.target.value})}
+    />
+    <button onClick={() => submitEdit(editingGame._id, { 
+      genres: editingGame.genres  })}>
+      Edit Genres
+    </button>
+
+    <input 
+      type="text"
+      value={editingGame.releaseDate}
+      onChange={(e) => setEditingGame({...editingGame, releaseDate: e.target.value})}
+    />
+    <button onClick={() => submitEdit(editingGame._id, { 
+      releaseDate: editingGame.releaseDate  })}>
+      Edit Release Date
+    </button>
+
+    <input 
+      type="text"
+      value={editingGame.platforms}
+      onChange={(e) => setEditingGame({...editingGame, platforms: e.target.value})}
+    />
+    <button onClick={() => submitEdit(editingGame._id, { 
+      platforms: editingGame.platforms  })}>
+      Edit Platforms
+    </button>
+
+    <input 
+      type="file"
+      onChange={onChangeSetFile} />
+    <button onClick={() => submitCover(editingGame._id)}>
+      Edit gameCover
+    </button>
+
+    <div> 
+      <button onClick={() => setEditingGame(null)}>
+      Close
+    </button> </div>
+  </div>
+)}
         </Card.Body>
       </Card>
 {/*      <Modal show={showModal} onHide={handleCloseModal}>

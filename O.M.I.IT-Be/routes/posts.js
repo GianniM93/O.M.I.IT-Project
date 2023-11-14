@@ -78,38 +78,56 @@ posts.get('/posts',  async (req, res) => {
            message: "Internal Server Error" })}  })
 
 //---------------------PATCH-------------------
-posts.patch('/posts/update/:postId', cloudUpload.single('cover'), async (req, res) => {
-    const { postId } = req.params;
-    // Verifica se il post esiste
-    const postExist = await PostModel.findById(postId);
+posts.patch('/:gamerId/posts/:postId', verifyToken, cloudUpload.single('newCover'), async (req, res) => {
+  const { gamerId, postId } = req.params;
+  const {newCategory,newTitle,newCover,newValue,newUnit,newContent} = req.body;
+  const userId = req.user.id;
 
-    if (!postExist) {
-        return res.status(404).send({
-            statusCode: 404,
-            message: "This post does not exist!"
-        }) }
+  try {
+    const user = await UserModel.findById(gamerId).populate('userPosts');
+    if (!user) {
+      return res.status(404).send({
+        statusCode: 404,
+        message: "User not found!"
+      }) }
 
-    try {
-        let dataToUpdate = req.body;
-        // Verifica se è stato caricato un file (immagine) e se sì, aggiorna l'URL dell'immagine
-        if (req.file) {
-            const imageUrl = req.file.path;
-            dataToUpdate.cover = imageUrl }
+    const post = user.userPosts.find((c) => c._id.toString() === postId);
+    if (!post) {
+      return res.status(404).send({
+        statusCode: 404,
+        message: "Post not found!"
+      }) }
 
-        // Aggiorna il post con i dati forniti
-        const options = { new: true };
-        const result = await PostModel.findByIdAndUpdate(postId, dataToUpdate, options);
+    if (post.postCreator.toString() !== userId.toString()) {
+      return res.status(403).send({
+          statusCode: 403,
+          message: "Unauthorized to delete this Post"
+      }) }
 
-        res.status(200).send({
-            statusCode: 200,
-            message: "Post updated successfully",
-            result
-        });
-    } catch (e) {
-        res.status(500).send({
-            statusCode: 500,
-            message: "Internal Server Error"
-        }) }
+      if (req.file) {
+        const imageUrl = req.file.path;
+        newCover = imageUrl }
+
+    // Aggiorna i dati del gioco con i nuovi valori
+    if (newCategory !== undefined) post.category = newCategory;
+    if (newTitle !== undefined) post.title = newTitle;
+    if (newCover !== undefined) post.cover = newCover;
+    if (newValue !== undefined) post.readTime.value = newValue;
+    if (newUnit !== undefined) post.readTime.unit = newUnit;
+    if (newContent !== undefined) post.content = newContent;
+    await post.save();
+
+    res.status(200).send({
+      statusCode: 200,
+      message: "Post updated successfully",
+      post
+    });
+  } catch (e) {
+      console.error(e);
+    res.status(500).send({
+      statusCode: 500,
+      message: "Internal Server Error"
+    }) }
 });
 
 //-------------------------------POST-----------------------------------------------------

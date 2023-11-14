@@ -69,6 +69,7 @@ const CollectionList = ({close,games,gamer}) => {
   releaseDate={game.releaseDate}
   platforms={game.platforms}
   collCreator={game.collCreator}
+  game={game}
 />
 ))}
   </Col>

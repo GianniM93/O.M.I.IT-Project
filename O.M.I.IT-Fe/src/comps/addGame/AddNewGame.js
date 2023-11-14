@@ -26,9 +26,11 @@ const AddNewGame = ({ close }) => {
             //console.log("Dati utente:",userData)
 
         setUserInfo(userData);   
-        setFormData({
-          ...formData,
-          collCreator: userData._id });
+        setFormData(fData => ({
+          ...fData,
+          collCreator: userData._id
+        }));
+  
             
       } catch (error) {
         console.error('Errore durante il recupero dei dati utente:', error);
