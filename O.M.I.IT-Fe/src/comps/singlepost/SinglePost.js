@@ -43,6 +43,9 @@ fetchUserData();
 //-------------------------delete-----------------------------------
 
 const deletePost = async (postId) => {
+  const isConfirmed = window.confirm("Do You Really Want to Delete your Post?");
+  if (!isConfirmed) {return}
+
   try {
       const token = JSON.parse(localStorage.getItem('loggedInUser'));
       const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${postCreator}/posts/${postId}`, {
@@ -212,7 +215,7 @@ return (
     </button>
 
     <input 
-      type="text"
+      type="number"
       value={editingPost.value}
       onChange={(e) => setEditingPost({...editingPost, value: e.target.value})}
     />
@@ -249,9 +252,9 @@ return (
     </button>
 
     <div> 
-      <button onClick={() => setEditingPost(null)}>
+      <Button  variant="secondary" onClick={() => setEditingPost(null)}>
       Close
-    </button> </div>
+    </Button> </div>
   </div>
 )}
           

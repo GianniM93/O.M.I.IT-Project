@@ -103,7 +103,7 @@ users.post('/users/create', validateUser, async(req,res)=>{
 
         res.status(201).send({
             statusCode:201,
-            message:"New User Created!",
+            message:"New Account Created!",
             payload: user  }) }
             
         catch(e){
@@ -113,7 +113,7 @@ users.post('/users/create', validateUser, async(req,res)=>{
 })
 
 //---------------------DELETE-----------------------------
-users.delete('/users/delete/:userId', async (req, res) => {
+users.delete('/users/delete/:userId', verifyToken, async (req, res) => {
     const { userId } = req.params;
 
     try {
@@ -138,7 +138,7 @@ users.delete('/users/delete/:userId', async (req, res) => {
 
 //---------------------Patch-----------------------------
 
-users.patch('/users/update/:userId', cloudUpload.single('avatar'), async(req,res)=>{
+users.patch('/users/update/:userId', verifyToken, cloudUpload.single('avatar'), async(req,res)=>{
     const{userId}=req.params;
     const userExist=await UserModel.findById(userId)
 
@@ -149,7 +149,12 @@ users.patch('/users/update/:userId', cloudUpload.single('avatar'), async(req,res
 
     try{
         const dataToUpdate=req.body;
-        // Verifica se è stato caricato un file (immagine) e se sì, aggiorna l'URL dell'immagine
+
+        if (dataToUpdate.password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(dataToUpdate.password, salt);
+            dataToUpdate.password = hashedPassword }
+
         if (req.file) {
             const imageUrl = req.file.path;
             dataToUpdate.avatar = imageUrl }

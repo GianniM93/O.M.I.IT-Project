@@ -22,6 +22,15 @@ DELETE http://localhost:5050/users/delete/ HTTP/1.1
 PATCH  http://localhost:5050/users/update/
 Content-Type: application/json
 
+{
+"firstName": "X",
+"lastName": "X",
+"nickName": "X",
+"email": "emailx@mail.it",
+"birthDate": "X",
+"password": "X"
+}
+
 ####
 
 GET http://localhost:5050/posts

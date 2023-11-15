@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import {useNavigate} from "react-router-dom";
+//'/users/update/:userId'
 
-
-const SignUp = () => {
+const UserEdit = ({close,gamer}) => {
 const [file, setFile] = useState(null)
 const [formData, setFormData] = useState()
-const navigate = useNavigate()
 const onChangeSetFile = (e) => {
     setFile(e.target.files[0]) }
 const uploadFile = async (avatar) => {
@@ -26,52 +24,48 @@ const onSubmit = async (e) => {
     e.preventDefault()
     
     if (file) {
-        try {
             const uploadAvatar = await uploadFile(file)
             //console.log(uploadAvatar)
             const finalBody = {
                 ...formData,
                 avatar: uploadAvatar.avatar }
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/users/create`, {
+                const token = JSON.parse(localStorage.getItem('loggedInUser'));
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/users/update/${gamer}`, {
                 headers: {
-                    "Content-Type": "application/json" },
-                method: 'POST',
+                    "Content-Type": "application/json",'loggedInUser': token },
+                method: 'PATCH',
                 body: JSON.stringify(finalBody) })
                 const result = await response.json();
                   if (response.ok) {
-                    alert(result.message);
-                    navigate('/')
-                } else {
-                    console.error("Errore nella richiesta POST.")}
-        } catch(error) {
-            console.log(error) }
+                      alert(result.message);
+                  } else {
+                      alert('An error occurred: ' + result.message) }
+        
 
     } else {
-      try {
         const finalBody = {
             ...formData }
-        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/users/create`, {
+            const token = JSON.parse(localStorage.getItem('loggedInUser'));
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/users/update/${gamer}`, {
             headers: {
-                "Content-Type": "application/json" },
-            method: 'POST',
+                "Content-Type": "application/json",'loggedInUser': token },
+            method: 'PATCH',
             body: JSON.stringify(finalBody) })
             const result = await response.json();
               if (response.ok) {
-                alert(result.message);
-                navigate('/')
-            } else {
-                console.error("Errore nella richiesta POST.")}
-    } catch(error) {
-        console.log(error) } } }
+                  alert(result.message);
+             }else {
+                  alert('An error occurred: ' + result.message) } }}
+    
 
 return (
         <>
-  <h1>Wanna Join?</h1>
+  <h1>Edit Your Data!</h1>
     <Form encType="multipart/form-data" onSubmit={onSubmit}>
       
       <Form.Group className="mb-3">
         <Form.Label>FirstName</Form.Label>
-        <Form.Control type="text" placeholder="FirstName" name="firstName" required
+        <Form.Control type="text" placeholder="FirstName" name="firstName"
          onChange={(e) => setFormData({
             ...formData,
             firstName: e.target.value
@@ -80,7 +74,7 @@ return (
 
       <Form.Group className="mb-3">
         <Form.Label>LastName</Form.Label>
-        <Form.Control type="text" placeholder="LastName" name="lastName" required
+        <Form.Control type="text" placeholder="LastName" name="lastName"
         onChange={(e) => setFormData({
             ...formData,
             lastName: e.target.value
@@ -89,7 +83,7 @@ return (
 
       <Form.Group className="mb-3">
         <Form.Label>NickName</Form.Label>
-        <Form.Control type="text" placeholder="NickName" name="nickName" required
+        <Form.Control type="text" placeholder="NickName" name="nickName"
         onChange={(e) => setFormData({
             ...formData,
             nickName: e.target.value
@@ -98,7 +92,7 @@ return (
 
       <Form.Group className="mb-3">
         <Form.Label>email</Form.Label>
-        <Form.Control type="text" placeholder="email" name="email" required
+        <Form.Control type="text" placeholder="email" name="email"
         onChange={(e) => setFormData({
             ...formData,
             email: e.target.value
@@ -107,7 +101,7 @@ return (
 
       <Form.Group className="mb-3">
         <Form.Label>BirthDate</Form.Label>
-        <Form.Control type="text" placeholder="BirthDate" name="birthDate" required
+        <Form.Control type="text" placeholder="BirthDate" name="birthDate"
         onChange={(e) => setFormData({
             ...formData,
             birthDate: e.target.value
@@ -122,7 +116,7 @@ return (
 
       <Form.Group className="mb-3">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="text" placeholder="Password" name="password" required
+        <Form.Control type="text" placeholder="Password" name="password"
          onChange={(e) => setFormData({
             ...formData,
             password:e.target.value
@@ -130,15 +124,14 @@ return (
       </Form.Group>
 
       <Button variant="primary mx-3 mb-3" type="submit">
-        Signup!
+        UserEdit!
       </Button>
-      <p>or back to</p>
-      <Button onClick={()=>navigate('/')} variant="primary">
-        Login
+      <Button onClick={() => close(false)}  variant="secondary mb-3">
+        Close
       </Button>
     </Form>
     </>
     ) };
 
-export default SignUp;
+export default UserEdit;
 

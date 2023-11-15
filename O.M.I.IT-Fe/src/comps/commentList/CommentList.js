@@ -34,6 +34,9 @@ const CommentList = ({ comments, infoId }) => {
 
   //-----------------------------DELETE----------------------------------------
   const deleteComment = async (commentId) => {
+    const isConfirmed = window.confirm("Do You Really Want to Delete your Comment?");
+  if (!isConfirmed) {return}
+
     try {
         const token = JSON.parse(localStorage.getItem('loggedInUser'));
         const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${infoId}/comments/${commentId}`, {
@@ -131,9 +134,9 @@ const submitEdit = async (commentId, updatedFields) => {
      Edit Rate
     </button>
     <div>
-    <button onClick={() => setEditingComment(null)}>
+    <Button variant='secondary' onClick={() => setEditingComment(null)}>
       Close
-    </button> </div>
+    </Button> </div>
   </div>
 )}
     </div>

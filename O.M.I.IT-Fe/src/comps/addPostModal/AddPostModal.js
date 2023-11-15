@@ -167,7 +167,7 @@ const AddPostModal = ({ close }) => {
       <Button variant="primary mx-3 mb-3" type="submit">
         Add Post!
       </Button>
-      <Button onClick={() => close(false)}  variant="primary mb-3">
+      <Button onClick={() => close(false)}  variant="secondary mb-3">
         Close
       </Button>
     </Form>

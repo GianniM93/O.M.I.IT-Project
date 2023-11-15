@@ -162,7 +162,7 @@ const AddNewGame = ({ close }) => {
       </Form.Group>
 
       <Button variant="primary mx-3 mb-3" type="submit">
-        Add Post!
+        Add Game!
       </Button>
       <Button onClick={() => close(false)}  variant="primary mb-3">
         Close

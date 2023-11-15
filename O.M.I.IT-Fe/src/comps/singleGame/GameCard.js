@@ -39,6 +39,9 @@ fetchUserData();
 //-------------------------delete-----------------------------------
 
 const deleteGame = async (gameId) => {
+  const isConfirmed = window.confirm("Do You Really Want to Delete your Game?");
+  if (!isConfirmed) {return}
+
   try {
       const token = JSON.parse(localStorage.getItem('loggedInUser'));
       const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${collCreator}/collections/${gameId}`, {
@@ -251,9 +254,9 @@ return (
     </button>
 
     <div> 
-      <button onClick={() => setEditingGame(null)}>
+      <Button variant='secondary' onClick={() => setEditingGame(null)}>
       Close
-    </button> </div>
+    </Button> </div>
   </div>
 )}
         </Card.Body>
