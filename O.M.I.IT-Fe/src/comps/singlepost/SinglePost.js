@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import CommentList from '../commentList/CommentList';
 import AddComment from '../addComment/AddComment';
+import { useNavigate } from 'react-router-dom'; 
 import './singlePost.css'
 
 const SinglePost = ({post,id,category,title,cover,value,unit,name,avatar,content,date,postComments,postCreator}) => {
@@ -12,6 +13,7 @@ const SinglePost = ({post,id,category,title,cover,value,unit,name,avatar,content
   const [userInfo, setUserInfo] = useState([]);
   const [editingPost, setEditingPost] = useState(null);
   const [file, setFile] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Funzione per ottenere i dettagli dell'utente collegato
@@ -154,6 +156,9 @@ const submitCover = async (postId) => {
   const handleCloseModal = () => {
     setShowModal(false) };
 
+    const visitUserProfile = () => {
+      navigate(`/userProfile/${postCreator}`) };
+
 return (
     <div className="d-flex justify-content-center align-items-center ms-3" sm={12}>
       <Card key={id} border="primary" style={{ width: '18rem' }}>
@@ -165,7 +170,7 @@ return (
             Category: {category}
           </Card.Text>
           <Card.Text>
-            Author: {name}
+            Author: <span onClick={visitUserProfile} style={{ cursor: 'pointer', color: 'blue' }}>{name}</span>
           </Card.Text>
           <div className='avt'><Card.Img  src={avatar} /></div>
           <Card.Text>

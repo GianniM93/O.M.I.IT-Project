@@ -9,6 +9,7 @@ import ProtectedRoutes from "./middlewares/ProtectedRoutes";
 import Success from "./comps/ghSuccess/Success"
 import InfoPage from './pages/infoPage/MyInfoPage';
 import ProfilePage from './pages/profilePage/MyProfilePage';
+import VisitedUser from './pages/usersProfile/VisitedProfile';
 
 class App extends Component {
   constructor(props) {
@@ -32,7 +33,8 @@ render() {
         <Route path="/home" 
         element={<Main appQuery={this.state.query} SetAppQuery={this.setQuery}/>}/>
         <Route path="/info" element={<InfoPage/>} />
-        <Route path="/myprofile" element={<ProfilePage/>} />
+        <Route path="/myprofile" element={<ProfilePage appQuery={this.state.query} SetAppQuery={this.setQuery}/>} />
+        <Route path="/userProfile/:postCreator" element={<VisitedUser appQuery={this.state.query} SetAppQuery={this.setQuery}/>} />
         </Route>
       </Routes>
     </BrowserRouter>

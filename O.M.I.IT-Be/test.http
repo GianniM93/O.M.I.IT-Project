@@ -38,6 +38,13 @@ GET http://localhost:5050/posts
 
 ####
 
+
+GET http://localhost:5050/userId/posts
+
+
+####
+
+
 PATCH  http://localhost:5050/posts/update/
 Content-Type: application/json
 

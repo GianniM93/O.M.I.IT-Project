@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import GameCard from '../singleGame/GameCard';
 
-const CollectionList = ({close,games,gamer}) => {
+const CollectionList = ({close,games,gamer,appQuery}) => {
 
   //const [userInfo, setUserInfo] = useState([]);
 
@@ -52,12 +52,20 @@ const CollectionList = ({close,games,gamer}) => {
         console.error('Errore di rete:', error);
     } };  */
 
+  // Filtraggio dei post in base alla query di ricerca
+  const filteredGames = appQuery
+  ? games && games?.filter((game) =>
+      game.gameTitle.toLowerCase().includes(appQuery.toLowerCase())
+    )
+  : games;
+
+
   return (
     <>
       <Container className="mb-5">
         <Row>
           <Col className="d-flex flex-wrap gap-4">
-      {games.map((game) => (
+          {filteredGames && filteredGames?.map((game) => (
   <GameCard
   key={game._id}
   id={game._id}

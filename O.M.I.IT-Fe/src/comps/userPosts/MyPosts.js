@@ -1,37 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
+import Button from 'react-bootstrap/Button';
 import SinglePost from "../singlepost/SinglePost";
 
-const LatestRelease = ({ appQuery }) => {
+const MyPosts = ({close,gamer,appQuery}) => {
   const [posts, setPosts] = useState([]); 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
 
   
   
 
-  
+  useEffect(() => {
     const token = JSON.parse(localStorage.getItem('loggedInUser'));
-    const fetchPosts = async (page) => {
+    const fetchPosts = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/posts?page=${page}`,{
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${gamer}/posts`, {
           headers: {"loggedInUser": token }} );
         if (!response.ok) {
           throw new Error("Errore nella richiesta");
         }
         const data = await response.json();
         setPosts(data.posts); 
-        setCurrentPage(data.currentPage);
-        setTotalPages(data.totalPages);
       } catch (error) {
         console.error("Errore durante il recupero dei post:", error);
       } };
 
-
-      useEffect(() => {
-      fetchPosts(currentPage);
-   }, [currentPage]);
+      fetchPosts();
+   }, []);
 
 
 
@@ -75,14 +70,11 @@ const LatestRelease = ({ appQuery }) => {
           </Col>
         </Row>
       </Container>
-      <button onClick={() => setCurrentPage(prev => prev - 1)} disabled={currentPage === 1}>
-           Pagina Precedente
-       </button>
-       <button onClick={() => setCurrentPage(prev => prev + 1)} disabled={currentPage === totalPages}>
-           Pagina Successiva
-       </button>
+      <Button onClick={() => close(false)}  variant="secondary mb-3">
+        Close
+      </Button>
     </>
   );
 };
 
-export default LatestRelease;
+export default MyPosts;

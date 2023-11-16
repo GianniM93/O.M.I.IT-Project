@@ -80,6 +80,29 @@ catch(e){
         statusCode:500,
         message:'Internal Server Error'  }) }  })
 
+//---------------GETbyID---------------------------------
+
+users.get('/users/byid/:userId', verifyToken, async(req,res)=>{
+    const{userId}=req.params;
+
+    try{
+        const users=await UserModel.findById(userId)
+        .populate('userCollection')
+       .populate('userPosts')
+       .populate('userComments')
+        if(!users){
+            return res.status(404).send({
+                statusCode: 404,
+                message: "User not found!" }) }
+        res.status(200).send({
+                statusCode: 200,
+                users  }) }
+    catch(e){
+        res.status(500).send({
+            statusCode: 500,
+            message: "Errore interno del server" }) }
+})
+
 //------------------POST-----------------------------------------
 users.post('/users/create', validateUser, async(req,res)=>{
 

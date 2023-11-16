@@ -63,14 +63,52 @@ posts.post('/posts/cloudUpload', cloudUpload.single('cover'), async (req, res) =
             message: "Internal Server Error" })
     } })
 
-//----------------------GET---------------------
+
+    //----------------------GET---------------------
+
+posts.get('/:userId/posts', verifyToken, async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await UserModel.findById(userId).populate('userPosts');
+    if (!user) {
+      return res.status(404).send({
+        statusCode: 404,
+        message: "User not found!"
+      })  }
+
+        // Popola postComments per ogni post in userPosts
+    const postsWithComments = await Promise.all(
+      user.userPosts.map(async (post) => {
+        return PostModel.findById(post._id).populate('postComments');
+      }) );
+
+    res.status(200).send({
+      statusCode: 200,
+      posts: postsWithComments
+    });
+  } catch (e) {
+    res.status(500).send({
+      statusCode: 500,
+      message: "Internal Server Error"
+    }) }
+});
+
+//----------------------GET all P's---------------------
 posts.get('/posts',  async (req, res) => {
+  const { page = 1, pageSize = 4 } = req.query
    try {
        const posts = await PostModel.find()
        .populate('postComments')
+       .limit(pageSize)
+       .skip((page -1) * pageSize)
+       const totalPosts = await  PostModel.count()
        res.status(200)
            .send({
                statusCode: 200,
+               currentPage: Number(page),
+               totalPages: Math.ceil(totalPosts / pageSize),
+               totalPosts,
                posts }) }
     catch (e) {
        res.status(500).send({
