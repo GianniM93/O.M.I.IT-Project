@@ -1,35 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import SinglePost from "../singlepost/SinglePost";
+import Button from 'react-bootstrap/Button';
+import SingleVPost from "../singlepost/SingleVPost";
 
-const LatestRelease = ({userInfo,appQuery }) => {
+const VPosts = ({close,userInfo,myInfo,appQuery}) => {
   const [posts, setPosts] = useState([]); 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
+    const gamer=userInfo._id
     const token = JSON.parse(localStorage.getItem('loggedInUser'));
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/posts?page=${currentPage}`,{
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${gamer}/posts`, {
           headers: {"loggedInUser": token }} );
         if (!response.ok) {
-          throw new Error("Errore nella richiesta") }
+          throw new Error("Errore nella richiesta");
+        }
         const data = await response.json();
         setPosts(data.posts); 
-        setCurrentPage(data.currentPage);
-        setTotalPages(data.totalPages);
       } catch (error) {
         console.error("Errore durante il recupero dei post:", error);
       } };
+
       fetchPosts();
-   }, [currentPage]);
+   }, [userInfo._id]);
 
   // Filtraggio dei post in base alla query di ricerca
   const filteredPosts = appQuery
     ? posts && posts?.filter((post) =>
-        post.title.toLowerCase().includes(appQuery.toLowerCase()) )
+        post.title.toLowerCase().includes(appQuery.toLowerCase())
+      )
     : posts;
 
   return (
@@ -39,7 +40,7 @@ const LatestRelease = ({userInfo,appQuery }) => {
           <Col className="d-flex flex-wrap gap-4">
             {filteredPosts && filteredPosts?.map((post) => (
              
-              <SinglePost
+              <SingleVPost
                 key={post._id}
                 id={post._id}
                 category={post.category}
@@ -57,18 +58,16 @@ const LatestRelease = ({userInfo,appQuery }) => {
                 postCreator={post.postCreator}
                 post={post}
                 userInfo={userInfo}
+                myInfo={myInfo}
               />
             ))}
           </Col>
         </Row>
       </Container>
-      <button onClick={() => setCurrentPage(prev => prev - 1)} disabled={currentPage === 1}>
-           Pagina Precedente
-       </button>
-       <button onClick={() => setCurrentPage(prev => prev + 1)} disabled={currentPage === totalPages}>
-           Pagina Successiva
-       </button>
+      <Button onClick={() => close(false)}  variant="secondary mb-3">
+        Close
+      </Button>
     </>
   ) };
 
-export default LatestRelease;
+export default VPosts;

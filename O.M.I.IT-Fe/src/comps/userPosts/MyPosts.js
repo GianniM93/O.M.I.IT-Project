@@ -24,7 +24,7 @@ const MyPosts = ({close,userInfo,appQuery}) => {
       } };
 
       fetchPosts();
-   }, []);
+   }, [userInfo._id]);
 
   // Filtraggio dei post in base alla query di ricerca
   const filteredPosts = appQuery
@@ -32,7 +32,6 @@ const MyPosts = ({close,userInfo,appQuery}) => {
         post.title.toLowerCase().includes(appQuery.toLowerCase())
       )
     : posts;
-    console.log('myinfo', userInfo._id);
 
   return (
     <>

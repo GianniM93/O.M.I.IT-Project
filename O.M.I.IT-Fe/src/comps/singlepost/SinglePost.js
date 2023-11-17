@@ -14,7 +14,6 @@ const SinglePost = ({post,id,category,title,cover,value,unit,name,avatar,content
   const [editingPost, setEditingPost] = useState(null);
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
-  console.log('myinfos', userInfo._id);
 
 
 //-------------------------delete-----------------------------------
@@ -132,7 +131,10 @@ const submitCover = async (postId) => {
     setShowModal(false) };
 
     const visitUserProfile = () => {
-      navigate(`/userProfile/${postCreator}`) };
+      if (postCreator === userInfo?._id) {
+        navigate('/myprofile');
+      } else {
+      navigate(`/userProfile/${postCreator}`) } };
 
 return (
     <div className="d-flex justify-content-center align-items-center ms-3" sm={12}>

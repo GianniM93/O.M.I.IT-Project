@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 import MyNavbar from '../../comps/navbar/MyNav';
 import { navLinks } from '../../data/myNavData';
 import Button from 'react-bootstrap/Button';
-import CollectionList from '../../comps/userCollection/MyUserCollection';
-import MyPosts from '../../comps/userPosts/MyPosts';
+import VCollectionList from '../../comps/userCollection/VUserCollection';
+import VPosts from '../../comps/userPosts/VPosts';
 
 const VisitedUser=({appQuery,SetAppQuery})=>{
     const {postCreator} = useParams();
     const [userInfo, setUserInfo] = useState([]);
+    const [myInfo, setMyInfo] = useState([]);
     const [isModalOpen2, setIsModalOpen2] = useState(false)
     const [isModalOpen4, setIsModalOpen4] = useState(false)
 
@@ -16,7 +17,7 @@ const VisitedUser=({appQuery,SetAppQuery})=>{
     const toggleModal2 = () => setIsModalOpen2(!isModalOpen2)
     const toggleModal4 = () => setIsModalOpen4(!isModalOpen4)
 
-    //-------------------------LoggedUser--------------------------------------------------------'/users/byid/:userId'
+    //-------------------------VisitedUser--------------------------------------------------------
     useEffect(() => {
         const fetchUserData = async () => {
           try {
@@ -39,6 +40,28 @@ const VisitedUser=({appQuery,SetAppQuery})=>{
   }, []);
 //------------------------------------------------------------------------------
 
+//-------------------------LoggedUser--------------------------------------------------------
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem('loggedInUser'));
+
+      const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
+        headers: {'loggedInUser': token },
+      });
+
+      if (!response.ok) {
+        throw new Error('Errore nella richiesta') }
+
+      const userData = await response.json();
+      setMyInfo(userData);
+      //console.log("Dati utente:",userData) 
+} catch (error) {
+  console.error('Errore durante il recupero dei dati utente:', error);
+} };
+fetchUserData();
+}, []);
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 
@@ -59,12 +82,9 @@ const VisitedUser=({appQuery,SetAppQuery})=>{
      variant="warning ms-3 my-3">
      My Posts!
     </Button>
-    {isModalOpen2 && (<CollectionList close={setIsModalOpen2} games={userInfo.userCollection} gamer={userInfo._id} appQuery={appQuery} />)}
-    {isModalOpen4 && (<MyPosts close={setIsModalOpen4} gamer={userInfo._id} appQuery={appQuery} />)}
+    {isModalOpen2 && (<VCollectionList close={setIsModalOpen2} userInfo={userInfo} myInfo={myInfo} appQuery={appQuery} />)}
+    {isModalOpen4 && (<VPosts close={setIsModalOpen4} userInfo={userInfo} myInfo={myInfo} appQuery={appQuery} />)}
     </>
     )}
 
 export default VisitedUser;
-
-//<CollectionList close={setIsModalOpen2} games={userInfo.userCollection} gamer={userInfo._id} appQuery={appQuery} />
-//<MyPosts close={setIsModalOpen4} gamer={userInfo._id} appQuery={appQuery} />

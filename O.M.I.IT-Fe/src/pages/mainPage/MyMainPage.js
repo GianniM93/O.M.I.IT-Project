@@ -42,7 +42,7 @@ return(
    Add Post!
  </Button>
 </div>
-{isModalOpen && (<AddPostModal close={setIsModalOpen} /> )}
+{isModalOpen && (<AddPostModal close={setIsModalOpen} userInfo={userInfo} /> )}
 <div>
 <LatestPosts appQuery={appQuery} userInfo={userInfo} />
 </div>

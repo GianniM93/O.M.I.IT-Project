@@ -1,52 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 
-const AddPostModal = ({ close }) => {
+const AddPostModal = ({userInfo,close}) => {
     const [file, setFile] = useState(null)
-    const [userInfo, setUserInfo] = useState(null);
     const [formData, setFormData] = useState({
+      postCreator: userInfo?._id,
       readTime: {
       value: "",
       unit: "" },
     author:{
-      name:"",
-    avatar:"" } } )
-      
-
-      useEffect(() => {
-        // Funzione per ottenere i dettagli dell'utente collegato
-        const fetchUserData = async () => {
-          try {
-            const token = JSON.parse(localStorage.getItem('loggedInUser'));
-    
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
-              headers: {'loggedInUser': token },
-            });
-    
-            if (!response.ok) {
-              throw new Error('Errore nella richiesta') }
-    
-            const userData = await response.json();
-            console.log("Dati utente:",userData)
-
-        setUserInfo(userData);   
-        setFormData({
-          ...formData,
-          postCreator: userData._id,
-          author: {
-            name: `${userData.firstName} ${userData.lastName}`,
-            avatar: userData.avatar },
-        });
-            
-      } catch (error) {
-        console.error('Errore durante il recupero dei dati utente:', error);
-      } };
-
-    fetchUserData();
-  }, []); // L'array vuoto indica che questa chiamata effettuerà la richiesta solo una volta
-
+      name: `${userInfo.firstName} ${userInfo.lastName}`,
+    avatar: userInfo?.avatar } } )
 
     const onChangeSetFile = (e) => {
         setFile(e.target.files[0]) }
