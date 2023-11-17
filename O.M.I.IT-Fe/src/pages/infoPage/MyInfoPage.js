@@ -20,7 +20,7 @@ const InfoPage=()=>{
          c'è tempo per crescere, migliorare e sviluppare questo e altri progetti futuri, sempre migliori. 
          Per concludere, desidero fare un ringraziamento speciale alla persona che, più di tutti, 
          ogni giorno mi trasmette la passione e la determinazione per lottare per i propri obiettivi, senza mai arrendersi. 
-         Quindi, grazie e...</p>
+         Quindi, grazie er...</p>
     <span className="header-container"><img src={SnMlogo} alt="SnMlogo" className='avt'/>...Fight!</span>
     </>
     )}
