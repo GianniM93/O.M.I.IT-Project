@@ -1,0 +1,30 @@
+.welcome-background {
+    background-image: url('../../LightSky.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  .myNav {
+    width: -moz-fit-content;
+    width: fit-content;
+    top: -120px;
+    left: 20px;
+    padding: 0;
+    margin-left: 0;
+  }
+  @media (min-width: 992px) {
+    .myNav {
+        width: -moz-fit-content;
+        width: fit-content;
+        top: -135px;
+        left: 20px;
+        padding: 0;
+        margin-left: 0;
+    }
+  }
+  .navCon {
+    background-color: gray;
+  }
+  .drop{
+    font-size: 10px;
+    padding-left: 35px;
+  }

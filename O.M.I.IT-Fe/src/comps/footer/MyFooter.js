@@ -31,7 +31,7 @@ const MyFooter=()=>{
     </tr>
     </tbody>
 </table>
-<p>© 2023 O.M.I.IT by Gianni Mocci</p>
+<p>© 2023 O.M.I.IT(v.1) by Gianni Mocci</p>
 </footer>
     ) }
 export default MyFooter;

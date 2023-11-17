@@ -69,7 +69,7 @@ fetchUserData();
     <>
     <MyNavbar className="mb-4" appQuery={appQuery} SetAppQuery={SetAppQuery} links={navLinks} />
     <div>
-        <h1>{userInfo.birthDate} "{userInfo.nickName}" {userInfo.lastName}</h1>
+        <h1>{userInfo.nickName}</h1>
        <img src={userInfo.avatar} alt='' className='avt'/>
     </div>
     <Button className="mb-4"

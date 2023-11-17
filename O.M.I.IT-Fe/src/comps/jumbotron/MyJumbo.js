@@ -7,6 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Modal from 'react-bootstrap/Modal';
+import './myJumbo.css'
 
 const Welcome = () => {
   const navigate = useNavigate()
@@ -76,24 +77,31 @@ const deleteUser = async (userId) => {
 
   return (
     <>
-      <div className="bg-light p-5 rounded-lg m-3 border border-primary">
+      <div className="p-4 rounded-lg m-2 border border-primary welcome-background">
+        <div className='PageTitle'>
         <h1 className="display-4 text-primary">O.M.I.IT</h1>
         <p className="lead">This is My Capstone Project!</p>
-
+        </div>
         {exactRoute && (
-        <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <NavDropdown title="Settings" id="basic-nav-dropdown">
-               <Button onClick={handleLogout}>Logout</Button>
+        <Navbar  className="bg-body-tertiary ms-auto myNav xs-myNav2 p-0">
+      <Container fluid className='navCon'>
+        <Navbar.Toggle aria-controls="basic-navbar-nav p-0" />
+        <Navbar.Collapse className='top' id="basic-navbar-nav">
+          <Nav className="ms-auto mb-auto p-0">
+            <NavDropdown className="drop"
+            title="Settings" id="basic-nav-dropdown">
+               <Button className="ms-1 mt-1 p-0"
+               onClick={handleLogout} variant="secondary"
+               >Logout</Button>
               {exactRoute2 && (
           <>
-            <Button onClick={() => deleteUser(userInfo._id)}>Delete Account!</Button>
-            <Button className="mb-4"
+            <Button className="ms-1 mt-1 p-0 navButton"
+            onClick={() => deleteUser(userInfo._id)}
+            variant="danger"
+            >Delete Account!</Button>
+            <Button className="ms-1 mt-1 p-0"
               onClick={toggleModal}
-              variant="warning ms-3 my-3">
+              variant="warning ">
               Edit User!
             </Button>
 
