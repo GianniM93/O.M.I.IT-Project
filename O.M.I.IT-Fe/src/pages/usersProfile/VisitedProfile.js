@@ -51,13 +51,13 @@ useEffect(() => {
       });
 
       if (!response.ok) {
-        throw new Error('Errore nella richiesta') }
+        throw new Error('Request Error') }
 
       const userData = await response.json();
       setMyInfo(userData);
       //console.log("Dati utente:",userData) 
 } catch (error) {
-  console.error('Errore durante il recupero dei dati utente:', error);
+  console.error('Error while fetching user data:', error);
 } };
 fetchUserData();
 }, []);

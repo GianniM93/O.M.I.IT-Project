@@ -1,14 +1,10 @@
 import React, {useState} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-//import Modal from 'react-bootstrap/Modal';
 
 const GameCard = ({game,id,gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms,collCreator,userInfo}) => {
-  //const [showModal, setShowModal] = useState(false);
-  //const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingGame, setEditingGame] = useState(null);
   const [file, setFile] = useState(null)
-  //const [formData, setFormData] = useState({});
 
 //-------------------------delete-----------------------------------
 
@@ -28,7 +24,6 @@ const deleteGame = async (gameId) => {
 
       const result = await response.json();
       if (response.ok) {
-          // Rimuovi il post cancellato dalla lista o ricarica i post
           alert(result.message);
           console.log('Game cancellato con successo');
       } else {
@@ -38,7 +33,7 @@ const deleteGame = async (gameId) => {
     alert('An error occurred: ' + error.message)
       console.error('Errore di rete:', error);
   } };
-//---------------------------PATCH-------'/:gamerId/collections/:collectionId'-----------------------
+//---------------------------PATCH-------------------------------------------
 
 const startEdit = (game) => {
   //console.log(game)
@@ -114,13 +109,6 @@ const submitCover = async (gameId) => {
     alert('Network error: ' + error.message);
   } };
 
-
-/* const toggleModal = () => setIsModalOpen(!isModalOpen)
-  const handleShowModal = () => {
-    setShowModal(true) };
-  const handleCloseModal = () => {
-    setShowModal(false) };   */
-
 return (
     <div className="d-flex justify-content-center align-items-center ms-3" sm={12}>
       <Card key={id} border="primary" style={{ width: '18rem' }}>
@@ -142,8 +130,7 @@ return (
           </Card.Text>
           <Card.Text>
             Platforms: {platforms}
-          </Card.Text>
- {/*      <Button variant="primary" onClick={handleShowModal}>Comments</Button>   */} 
+          </Card.Text> 
           {collCreator === userInfo._id && (
           <div>
           <Button 
@@ -235,22 +222,6 @@ return (
 )}
         </Card.Body>
       </Card>
-{/*      <Modal show={showModal} onHide={handleCloseModal}>
-  <Modal.Header closeButton>
-    <Modal.Title>Comments!</Modal.Title>
-    <Button
-   onClick={toggleModal}
-   variant="primary ms-3 my-3">               
-   Add Comment!
- </Button>
-    {isModalOpen && (<AddComment infoId={id} infoName={name} close={setIsModalOpen} /> )} 
-  </Modal.Header>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={handleCloseModal}>
-      Chiudi
-    </Button>
-  </Modal.Footer>
-</Modal>     */} 
     </div>
   ) }
 

@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Modal from 'react-bootstrap/Modal';
 
 const Welcome = () => {
   const navigate = useNavigate()
@@ -95,7 +96,20 @@ const deleteUser = async (userId) => {
               variant="warning ms-3 my-3">
               Edit User!
             </Button>
-            {isModalOpen && (<UserEdit close={setIsModalOpen} gamer={userInfo._id} /> )}
+
+            <Modal show={isModalOpen} onHide={toggleModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <UserEdit gamer={userInfo._id} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={toggleModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
           </>
         )}
             </NavDropdown>

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const UserEdit = ({close,gamer}) => {
+const UserEdit = ({gamer}) => {
 const [file, setFile] = useState(null)
 const [formData, setFormData] = useState()
 const onChangeSetFile = (e) => {
@@ -124,9 +124,6 @@ return (
 
       <Button variant="primary mx-3 mb-3" type="submit">
         UserEdit!
-      </Button>
-      <Button onClick={() => close(false)}  variant="secondary mb-3">
-        Close
       </Button>
     </Form>
     </>

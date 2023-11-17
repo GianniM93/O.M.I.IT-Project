@@ -20,7 +20,7 @@ const uploadFile = async (avatar) => {
         })
         return await response.json()
     } catch (error) {
-        console.log(error, 'Errore in uploadFile') } }
+        console.log(error, 'Error in uploadFile') } }
         
 const onSubmit = async (e) => {
     e.preventDefault()
@@ -42,7 +42,7 @@ const onSubmit = async (e) => {
                     alert(result.message);
                     navigate('/')
                 } else {
-                    console.error("Errore nella richiesta POST.")}
+                    console.error("Request Error")}
         } catch(error) {
             console.log(error) }
 
@@ -60,7 +60,7 @@ const onSubmit = async (e) => {
                 alert(result.message);
                 navigate('/')
             } else {
-                console.error("Errore nella richiesta POST.")}
+                console.error("Request Error")}
     } catch(error) {
         console.log(error) } } }
 

@@ -46,7 +46,7 @@ const deletePost = async (postId) => {
   } };
 //-------------------------------------------------------------------------
 
-//---------------------------PATCH-------'/:gamerId/posts/:postId'-----------------------
+//---------------------------PATCH----------------------------------------------
 
 const startEdit = (post) => {
   //console.log(post)
@@ -257,7 +257,7 @@ return (
   </Modal.Body>
   <Modal.Footer>
     <Button variant="secondary" onClick={handleCloseModal}>
-      Chiudi
+      Close
     </Button>
   </Modal.Footer>
 </Modal>

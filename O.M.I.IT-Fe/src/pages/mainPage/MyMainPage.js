@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import AddPostModal from '../../comps/addPostModal/AddPostModal';
 import MyNavbar from '../../comps/navbar/MyNav';
 import { navLinks } from '../../data/myNavData';
-import MyFooter from '../../comps/footer/MyFooter';
 
 const Main=({appQuery,SetAppQuery})=>{
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -22,12 +21,12 @@ useEffect(() => {
         headers: {'loggedInUser': token },
       });
       if (!response.ok) {
-        throw new Error('Errore nella richiesta') }
+        throw new Error('Request Error') }
       const userData = await response.json();
       setUserInfo(userData);
       //console.log("Dati utente:",userData) 
 } catch (error) {
-  console.error('Errore durante il recupero dei dati utente:', error);
+  console.error('Error while fetching user data:', error);
 } };
 fetchUserData();
 }, []);
@@ -46,6 +45,5 @@ return(
 <div>
 <LatestPosts appQuery={appQuery} userInfo={userInfo} />
 </div>
-<MyFooter />
 </> ) }
 export default Main;  

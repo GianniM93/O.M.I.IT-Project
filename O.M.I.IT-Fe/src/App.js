@@ -10,6 +10,7 @@ import Success from "./comps/ghSuccess/Success"
 import InfoPage from './pages/infoPage/MyInfoPage';
 import ProfilePage from './pages/profilePage/MyProfilePage';
 import VisitedUser from './pages/usersProfile/VisitedProfile';
+import MyFooter from './comps/footer/MyFooter';
 
 class App extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ render() {
         <Route path="/userProfile/:postCreator" element={<VisitedUser appQuery={this.state.query} SetAppQuery={this.setQuery}/>} />
         </Route>
       </Routes>
+      <MyFooter/>
     </BrowserRouter>
   ) } }
 

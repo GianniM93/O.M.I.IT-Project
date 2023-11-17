@@ -63,10 +63,10 @@ const LatestRelease = ({userInfo,appQuery }) => {
         </Row>
       </Container>
       <button onClick={() => setCurrentPage(prev => prev - 1)} disabled={currentPage === 1}>
-           Pagina Precedente
+           Prev Page
        </button>
        <button onClick={() => setCurrentPage(prev => prev + 1)} disabled={currentPage === totalPages}>
-           Pagina Successiva
+           Next Page
        </button>
     </>
   ) };

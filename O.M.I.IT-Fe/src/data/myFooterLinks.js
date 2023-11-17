@@ -1,15 +1,14 @@
 export const footerColOne=[
-{label:"Footer Link 1", href: "#"},
-{label:"Footer Link 2", href: "#"},
-{label:"Footer Link 3", href: "#"},
+{label:"PlayStation", href: "https://www.playstation.com/"},
+{label:"Xbox", href: "https://www.xbox.com/"},
+{label:"Nintendo", href: "https://www.nintendo.it/"},
+{label:"Steam", href: "https://store.steampowered.com/"}
 ]
 export const footerColTwo=[
-{label:"Footer Link 4", href: "#"},
-{label:"Footer Link 5", href: "#"},
-{label:"Footer Link 6", href: "#"},
+{label:"PSNProfiles", href: "https://psnprofiles.com/"},
+{label:"FinalRound", href: "https://www.finalround.it/"}
 ]
 export const footerColThree=[
-{label:"Footer Link 7", href: "#"},
-{label:"Footer Link 8", href: "#"},
-{label:"Footer Link 9", href: "#"},
+{label:"SnM", href: "https://www.youtube.com/@SabakuNoMaiku"},
+{label:"Ludomedia", href: "https://www.ludomedia.it/"}
 ]

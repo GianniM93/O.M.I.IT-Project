@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -28,7 +28,7 @@ const AddCommentModal = ({infoId,close,userInfo}) => {
                     alert('An error occurred: ' + result.message) }
 
             }catch (error) {
-              console.error('Errore durante l\'invio del commento:', error);
+              console.error('Error:', error);
             } }
 
     return (

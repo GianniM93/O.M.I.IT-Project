@@ -58,7 +58,7 @@ return (
   </Modal.Body>
   <Modal.Footer>
     <Button variant="secondary" onClick={handleCloseModal}>
-      Chiudi
+      Close
     </Button>
   </Modal.Footer>
 </Modal>

@@ -34,7 +34,7 @@ const AddPostModal = ({userInfo,close}) => {
         e.preventDefault()
 
         if (!userInfo) {
-          console.error('Dati utente non disponibili.');
+          console.error('User data not avaible');
           return }
 
         if (file) {  

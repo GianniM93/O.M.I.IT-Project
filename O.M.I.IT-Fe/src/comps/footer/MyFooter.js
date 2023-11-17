@@ -1,35 +1,37 @@
-import {Container,Row,Col} from 'react-bootstrap'
 import {footerColOne,footerColTwo,footerColThree } from '../../data/myFooterLinks';
 import { nanoid } from 'nanoid';
+import './footer.css'
 
 const MyFooter=()=>{
     return(
-<footer>
-<Container>
-<Row>
-    <Col>
+<footer className="social_links">
+<span className="socials">Visit these:</span><br />
+<table className='footertab'>
+<tbody>
+    <tr>
     {footerColOne.map((link)=>(
-        <li key={nanoid()}>
+        <th key={nanoid()} >
     <a href={link.href}> {link.label} </a>
-        </li>
+        </th>
     ))}
-    </Col>
-    <Col>
+    </tr>
+    <tr>
     {footerColTwo.map((link)=>(
-        <li key={nanoid()}>
+        <th key={nanoid()}>
     <a href={link.href}> {link.label} </a>
-        </li>
+        </th>
     ))}
-    </Col>
-    <Col>
+    </tr>
+    <tr>
     {footerColThree.map((link)=>(
-        <li key={nanoid()}>
+        <th key={nanoid()}>
     <a href={link.href}> {link.label} </a>
-        </li>
+        </th>
     ))}
-    </Col>
-</Row>
-</Container>
+    </tr>
+    </tbody>
+</table>
+<p>© 2023 O.M.I.IT by Gianni Mocci</p>
 </footer>
     ) }
 export default MyFooter;
