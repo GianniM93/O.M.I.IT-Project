@@ -4,55 +4,10 @@ import { Col, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import GameCard from '../singleGame/GameCard';
 
-const CollectionList = ({close,games,gamer,appQuery}) => {
-
-  //const [userInfo, setUserInfo] = useState([]);
-
-  /*  useEffect(() => {
-        // Funzione per ottenere i dettagli dell'utente collegato
-        const fetchUserData = async () => {
-          try {
-            const token = JSON.parse(localStorage.getItem('loggedInUser'));
-    
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
-              headers: {'loggedInUser': token },
-            });
-            if (!response.ok) {
-              throw new Error('Errore nella richiesta') }
-            const userData = await response.json();
-            setUserInfo(userData);
-            //console.log("Dati utente:",userData)  
-      } catch (error) {
-        console.error('Errore durante il recupero dei dati utente:', error);
-      } };
-    fetchUserData();
-  }, []);   */
-
-  /* const deleteComment = async (commentId) => {
-    try {
-        const token = JSON.parse(localStorage.getItem('loggedInUser'));
-        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/${infoId}/comments/${commentId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'loggedInUser': token
-            }
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-            // Rimuovi il commento cancellato dalla lista o ricarica i commenti
-            alert(result.message);
-            console.log('Commento cancellato con successo');
-        } else {
-          alert('An error occurred: ' + result.message)
-            console.error('Errore durante la cancellazione del commento') }
-    } catch (error) {
-      alert('An error occurred: ' + error.message)
-        console.error('Errore di rete:', error);
-    } };  */
+const CollectionList = ({close,userInfo,appQuery}) => {
 
   // Filtraggio dei post in base alla query di ricerca
+  const games=userInfo.userCollection
   const filteredGames = appQuery
   ? games && games?.filter((game) =>
       game.gameTitle.toLowerCase().includes(appQuery.toLowerCase())
@@ -78,7 +33,7 @@ const CollectionList = ({close,games,gamer,appQuery}) => {
   platforms={game.platforms}
   collCreator={game.collCreator}
   game={game}
-/>
+  userInfo={userInfo} />
 ))}
   </Col>
    </Row>
@@ -90,13 +45,3 @@ const CollectionList = ({close,games,gamer,appQuery}) => {
   )};
 
 export default CollectionList;
-
-/*
-gameTitle,
-gameCover,
-developer,
-publisher,
-genres,
-releaseDate,
-platforms,
-collCreator */

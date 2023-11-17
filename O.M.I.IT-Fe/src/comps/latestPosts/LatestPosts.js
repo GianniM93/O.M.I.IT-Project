@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import SinglePost from "../singlepost/SinglePost";
 
-const LatestRelease = ({ appQuery }) => {
+const LatestRelease = ({userInfo,appQuery }) => {
   const [posts, setPosts] = useState([]); 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -70,6 +70,7 @@ const LatestRelease = ({ appQuery }) => {
                 postComments={post.postComments}
                 postCreator={post.postCreator}
                 post={post}
+                userInfo={userInfo}
               />
             ))}
           </Col>

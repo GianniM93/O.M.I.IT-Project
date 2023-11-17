@@ -70,10 +70,10 @@ const ProfilePage=({appQuery,SetAppQuery})=>{
      variant="warning ms-3 my-3">
      My Posts!
     </Button>
-    {isModalOpen && (<AddNewGame close={setIsModalOpen} /> )}
-    {isModalOpen2 && (<CollectionList close={setIsModalOpen2} games={userInfo.userCollection} gamer={userInfo._id} appQuery={appQuery} /> )}
+    {isModalOpen && (<AddNewGame close={setIsModalOpen} userInfo={userInfo}/> )}
+    {isModalOpen2 && (<CollectionList close={setIsModalOpen2} userInfo={userInfo} appQuery={appQuery} /> )}
     {isModalOpen3 && (<UserEdit close={setIsModalOpen3} gamer={userInfo._id} /> )}
-    {isModalOpen4 && (<MyPosts close={setIsModalOpen4} gamer={userInfo._id} appQuery={appQuery} /> )}
+    {isModalOpen4 && (<MyPosts close={setIsModalOpen4} userInfo={userInfo} appQuery={appQuery} /> )}
     </>
     )}
 

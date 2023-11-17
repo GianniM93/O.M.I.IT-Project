@@ -4,13 +4,11 @@ import Container from "react-bootstrap/Container";
 import Button from 'react-bootstrap/Button';
 import SinglePost from "../singlepost/SinglePost";
 
-const MyPosts = ({close,gamer,appQuery}) => {
+const MyPosts = ({close,userInfo,appQuery}) => {
   const [posts, setPosts] = useState([]); 
 
-  
-  
-
   useEffect(() => {
+    const gamer=userInfo._id
     const token = JSON.parse(localStorage.getItem('loggedInUser'));
     const fetchPosts = async () => {
       try {
@@ -28,18 +26,13 @@ const MyPosts = ({close,gamer,appQuery}) => {
       fetchPosts();
    }, []);
 
-
-
-  
-
   // Filtraggio dei post in base alla query di ricerca
   const filteredPosts = appQuery
     ? posts && posts?.filter((post) =>
         post.title.toLowerCase().includes(appQuery.toLowerCase())
       )
     : posts;
-
-    //console.log(filteredPosts);
+    console.log('myinfo', userInfo._id);
 
   return (
     <>
@@ -65,6 +58,7 @@ const MyPosts = ({close,gamer,appQuery}) => {
                 postComments={post.postComments}
                 postCreator={post.postCreator}
                 post={post}
+                userInfo={userInfo}
               />
             ))}
           </Col>
@@ -74,7 +68,6 @@ const MyPosts = ({close,gamer,appQuery}) => {
         Close
       </Button>
     </>
-  );
-};
+  ) };
 
 export default MyPosts;

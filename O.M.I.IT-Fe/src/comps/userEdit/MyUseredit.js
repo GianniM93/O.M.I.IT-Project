@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-//'/users/update/:userId'
 
 const UserEdit = ({close,gamer}) => {
 const [file, setFile] = useState(null)

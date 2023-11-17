@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -7,40 +7,15 @@ import AddComment from '../addComment/AddComment';
 import { useNavigate } from 'react-router-dom'; 
 import './singlePost.css'
 
-const SinglePost = ({post,id,category,title,cover,value,unit,name,avatar,content,date,postComments,postCreator}) => {
+const SinglePost = ({post,id,category,title,cover,value,unit,name,avatar,content,date,postComments,postCreator,userInfo}) => {
   const [showModal, setShowModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState([]);
+  //const [userInfo, setUserInfo] = useState([]);
   const [editingPost, setEditingPost] = useState(null);
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
+  console.log('myinfos', userInfo._id);
 
-  useEffect(() => {
-    // Funzione per ottenere i dettagli dell'utente collegato
-    const fetchUserData = async () => {
-      try {
-        const token = JSON.parse(localStorage.getItem('loggedInUser'));
-
-        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
-          headers: {'loggedInUser': token },
-        });
-
-        if (!response.ok) {
-          
-          throw new Error('Errore nella richiesta');
-        }
-
-        const userData = await response.json();
-        setUserInfo(userData);
-        //console.log("Dati utente:",userData)
-
-        
-  } catch (error) {
-    console.error('Errore durante il recupero dei dati utente:', error);
-  } };
-
-fetchUserData();
-}, []);
 
 //-------------------------delete-----------------------------------
 
@@ -273,10 +248,10 @@ return (
    variant="primary ms-3 my-3">
    Add Comment!
  </Button>
- {isModalOpen && (<AddComment infoId={id} infoName={name} close={setIsModalOpen} /> )}
+ {isModalOpen && (<AddComment infoId={id} infoName={name} userInfo={userInfo} close={setIsModalOpen} /> )}
   </Modal.Header>
   <Modal.Body>
-  <CommentList infoId={id} comments={postComments} />
+  <CommentList infoId={id} comments={postComments} userInfo={userInfo} />
   </Modal.Body>
   <Modal.Footer>
     <Button variant="secondary" onClick={handleCloseModal}>

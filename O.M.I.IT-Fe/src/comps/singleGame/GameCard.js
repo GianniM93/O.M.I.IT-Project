@@ -1,40 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 //import Modal from 'react-bootstrap/Modal';
 
-const GameCard = ({game,id,gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms,collCreator}) => {
+const GameCard = ({game,id,gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms,collCreator,userInfo}) => {
   //const [showModal, setShowModal] = useState(false);
   //const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState([]);
   const [editingGame, setEditingGame] = useState(null);
   const [file, setFile] = useState(null)
   //const [formData, setFormData] = useState({});
-
-  useEffect(() => {
-    // Funzione per ottenere i dettagli dell'utente collegato
-    const fetchUserData = async () => {
-      try {
-        const token = JSON.parse(localStorage.getItem('loggedInUser'));
-
-        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
-          headers: {'loggedInUser': token },
-        });
-
-        if (!response.ok) {
-          throw new Error('Errore nella richiesta') }
-
-        const userData = await response.json();
-        setUserInfo(userData);
-        //console.log("Dati utente:",userData)
-
-        
-  } catch (error) {
-    console.error('Errore durante il recupero dei dati utente:', error);
-  } };
-
-fetchUserData();
-}, []);
 
 //-------------------------delete-----------------------------------
 

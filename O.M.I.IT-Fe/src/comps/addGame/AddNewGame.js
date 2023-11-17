@@ -1,45 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 
-const AddNewGame = ({ close }) => {
+const AddNewGame = ({userInfo,close}) => {
     const [file, setFile] = useState(null)
-    const [userInfo, setUserInfo] = useState(null);
-    const [formData, setFormData] = useState({})
+    const [formData, setFormData] = useState({collCreator: userInfo?._id})
       
-
-      useEffect(() => {
-        // Funzione per ottenere i dettagli dell'utente collegato
-        const fetchUserData = async () => {
-          try {
-            const token = JSON.parse(localStorage.getItem('loggedInUser'));
-    
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
-              headers: {'loggedInUser': token },
-            });
-    
-            if (!response.ok) {
-              throw new Error('Errore nella richiesta') }
-    
-            const userData = await response.json();
-            //console.log("Dati utente:",userData)
-
-        setUserInfo(userData);   
-        setFormData(fData => ({
-          ...fData,
-          collCreator: userData._id
-        }));
-  
-            
-      } catch (error) {
-        console.error('Errore durante il recupero dei dati utente:', error);
-      } };
-
-    fetchUserData();
-  }, []);
-
-
     const onChangeSetFile = (e) => {
         setFile(e.target.files[0]) }
 

@@ -3,45 +3,15 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 
-const AddCommentModal = ({infoId, close }) => {
-    const [formData, setFormData] = useState({})
+const AddCommentModal = ({infoId,close,userInfo}) => {
+    const [formData, setFormData] = useState({
+      commCreator: userInfo?._id,
+      commAuthor: `${userInfo?.firstName} ${userInfo?.lastName}`})
       
-
-      useEffect(() => {
-        // Funzione per ottenere i dettagli dell'utente collegato
-        const fetchUserData = async () => {
-          try {
-            const token = JSON.parse(localStorage.getItem('loggedInUser'));
-    
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
-              headers: {'loggedInUser': token },
-            });
-    
-            if (!response.ok) {
-              throw new Error('Errore nella richiesta') }
-    
-            const userData = await response.json();
-            console.log("Dati utente:",userData)
-
-            
-        setFormData({
-          ...formData,
-            commCreator: userData._id,
-            commAuthor: `${userData.firstName} ${userData.lastName}`});
-            
-      } catch (error) {
-        console.error('Errore durante il recupero dei dati utente:', error);
-      }
-    };
-
-    fetchUserData();
-  }, []); // L'array vuoto indica che questa chiamata effettuerà la richiesta solo una volta
 
     const onSubmit = async (e) => {
         e.preventDefault()
 
-        
-       
             try{
                 const finalBody = {
                 ...formData }  

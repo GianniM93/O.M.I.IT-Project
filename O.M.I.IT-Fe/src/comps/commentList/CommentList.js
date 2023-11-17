@@ -1,36 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 
-const CommentList = ({ comments, infoId }) => {
-  const [userInfo, setUserInfo] = useState([]);
+const CommentList = ({comments,infoId,userInfo}) => {
   const [editingComment, setEditingComment] = useState(null);
-
-    useEffect(() => {
-        // Funzione per ottenere i dettagli dell'utente collegato
-        const fetchUserData = async () => {
-          try {
-            const token = JSON.parse(localStorage.getItem('loggedInUser'));
-    
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/me`, {
-              headers: {'loggedInUser': token },
-            });
-    
-            if (!response.ok) {
-              
-              throw new Error('Errore nella richiesta');
-            }
-    
-            const userData = await response.json();
-            setUserInfo(userData);
-            //console.log("Dati utente:",userData)
-
-            
-      } catch (error) {
-        console.error('Errore durante il recupero dei dati utente:', error);
-      } };
-
-    fetchUserData();
-  }, []);
 
   //-----------------------------DELETE----------------------------------------
   const deleteComment = async (commentId) => {
