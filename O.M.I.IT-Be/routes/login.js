@@ -12,7 +12,7 @@ login.post('/login', async (req, res) => {
 
     if (!users) {
         return res.status(404).send({
-            message: 'Nome utente errato o inesistente',
+            message: 'User Not Found',
             statusCode: 404
         })
     }
@@ -22,7 +22,7 @@ login.post('/login', async (req, res) => {
     if (!validPassword) {
         return res.status(400).send({
             statusCode: 400,
-            message: 'Email o password errati.'
+            message: 'Wrong Email or Password.'
         })
     }
 
@@ -43,7 +43,7 @@ login.post('/login', async (req, res) => {
     })
 
     res.header('loggedInUser', token).status(200).send({
-        message: 'Login effettuato con successo',
+        message: 'Login successfully',
         statusCode: 200,
         token
     })
@@ -61,7 +61,7 @@ login.get('/me', verifyToken, async (req, res) => {
          .populate('userComments');
         if (!user) {
             return res.status(404).send({
-                message: 'Utente non trovato',
+                message: 'User Not Found',
                 statusCode: 404
             });
         }
@@ -69,7 +69,7 @@ login.get('/me', verifyToken, async (req, res) => {
         res.status(200).send(user);
     } catch (error) {
         res.status(500).send({
-            message: 'Errore nel recupero dell\'utente',
+            message: 'Error in recovering user',
             statusCode: 500
         });
     }

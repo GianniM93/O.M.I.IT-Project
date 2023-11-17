@@ -6,7 +6,6 @@ const postsRoute=require('./routes/posts');
 const usersRoute=require('./routes/users');
 const commentsRoute=require('./routes/comments');
 const collectionsRoute=require('./routes/collections');
-const emailRoute=require('./routes/sendEmail')
 const loginRoute=require('./routes/login')
 const githubRoute=require('./routes/github')
 const logger=require('./middlewares/logger')
@@ -27,7 +26,6 @@ app.use('/',postsRoute)
 app.use('/',usersRoute)
 app.use('/',commentsRoute)
 app.use('/',collectionsRoute)
-app.use('/',emailRoute)
 app.use('/',loginRoute)
 app.use('/',githubRoute)
 

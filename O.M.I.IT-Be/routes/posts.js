@@ -95,7 +95,7 @@ posts.get('/:userId/posts', verifyToken, async (req, res) => {
 });
 
 //----------------------GET all P's---------------------
-posts.get('/posts',  async (req, res) => {
+posts.get('/posts', verifyToken,  async (req, res) => {
   const { page = 1, pageSize = 4 } = req.query
    try {
        const posts = await PostModel.find()

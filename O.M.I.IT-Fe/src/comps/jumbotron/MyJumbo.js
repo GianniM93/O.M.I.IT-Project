@@ -1,10 +1,19 @@
 import React, {useState,useEffect} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import UserEdit from '../userEdit/MyUseredit';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
-const Welcome = ({user}) => {
+const Welcome = () => {
   const navigate = useNavigate()
   const location = useLocation();
   const [userInfo, setUserInfo] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen)
 
   //-------------------------LoggedUser--------------------------------------------------------
   useEffect(() => {
@@ -63,14 +72,39 @@ const deleteUser = async (userId) => {
     const exactRoute = location.pathname !== '/' && location.pathname !== '/signUp';
     const exactRoute2 = location.pathname === '/myprofile' ;
 
+
   return (
-    <div className="bg-light p-5 rounded-lg m-3 border border-primary">
-      <h1 className="display-4 text-primary">O.M.I.IT</h1>
-      <p className="lead">This is My Capstone Project!</p>
-      {exactRoute && <button onClick={handleLogout}>Logout</button>}
-      {exactRoute2 && <button onClick={()=>deleteUser(userInfo._id)}>Delete Account!</button>}
-    </div>
-  );
-};
+    <>
+      <div className="bg-light p-5 rounded-lg m-3 border border-primary">
+        <h1 className="display-4 text-primary">O.M.I.IT</h1>
+        <p className="lead">This is My Capstone Project!</p>
+
+        {exactRoute && (
+        <Navbar expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <NavDropdown title="Settings" id="basic-nav-dropdown">
+               <Button onClick={handleLogout}>Logout</Button>
+              {exactRoute2 && (
+          <>
+            <Button onClick={() => deleteUser(userInfo._id)}>Delete Account!</Button>
+            <Button className="mb-4"
+              onClick={toggleModal}
+              variant="warning ms-3 my-3">
+              Edit User!
+            </Button>
+            {isModalOpen && (<UserEdit close={setIsModalOpen} gamer={userInfo._id} /> )}
+          </>
+        )}
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar> )}
+      </div>
+    </>
+  ) };  
 
 export default Welcome;

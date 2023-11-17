@@ -51,7 +51,7 @@ users.post('/users/upload', upload.single('avatar')  , async (req, res) => {
     } catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server" })
+            message: "Internal Server Error!" })
     } })
 
 
@@ -62,7 +62,7 @@ users.post('/users/cloudUpload', cloudUpload.single('avatar'), async (req, res) 
     } catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server" })
+            message: "Internal Server Error!" })
     } })
 
 //---------------GET---------------------------------
@@ -78,7 +78,7 @@ try{
 catch(e){
     res.status(500).send({
         statusCode:500,
-        message:'Internal Server Error'  }) }  })
+        message:'Internal Server Error!'  }) }  })
 
 //---------------GETbyID---------------------------------
 
@@ -100,7 +100,7 @@ users.get('/users/byid/:userId', verifyToken, async(req,res)=>{
     catch(e){
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server" }) }
+            message: "Internal Server Error!" }) }
 })
 
 //------------------POST-----------------------------------------
@@ -132,7 +132,7 @@ users.post('/users/create', validateUser, async(req,res)=>{
         catch(e){
             res.status(500).send({
                 statusCode: 500,
-                message: "Errore interno del server" }) }
+                message: "Internal Server Error!" }) }
 })
 
 //---------------------DELETE-----------------------------
@@ -155,7 +155,7 @@ users.delete('/users/delete/:userId', verifyToken, async (req, res) => {
     } catch (e) {
         res.status(500).send({
             statusCode: 500,
-            message: "Errore interno del server"
+            message: "Internal Server Error!"
         }) }
 })
 
@@ -194,7 +194,7 @@ users.patch('/users/update/:userId', verifyToken, cloudUpload.single('avatar'), 
         console.log(e)
         res.status(500).send({
             statusCode: 500,
-            message: "Server Internal Error!" }) }
+            message: "Internal Server Error!" }) }
 })
 
 module.exports=users

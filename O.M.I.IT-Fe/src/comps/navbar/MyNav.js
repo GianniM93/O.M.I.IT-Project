@@ -3,15 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { nanoid } from "nanoid";
-//import { useLocation } from 'react-router-dom';
 
 const MyNavbar = ({ links, appQuery, SetAppQuery }) => {
-  //const location = useLocation();
   const handleSearchChange = (event) => {
-    SetAppQuery(event.target.value); // Chiama la funzione SetAppQuery per aggiornare 'query'
-  };
-
-  //const showSearchInput = location.pathname === '/home' || location.pathname === '/myprofile';
+    SetAppQuery(event.target.value) };
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary mb-5">
@@ -26,7 +21,6 @@ const MyNavbar = ({ links, appQuery, SetAppQuery }) => {
               </Nav.Link>
             ))}
           </Nav>
-       {/*  {showSearchInput && (    */} 
           <Nav>
             <input
               type="text"
@@ -34,11 +28,9 @@ const MyNavbar = ({ links, appQuery, SetAppQuery }) => {
               value={appQuery} 
               onChange={handleSearchChange} />
           </Nav> 
-     {/*      )}  */}
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  );
-};
+  ) };
 
 export default MyNavbar;

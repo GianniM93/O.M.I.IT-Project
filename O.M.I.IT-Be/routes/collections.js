@@ -1,5 +1,6 @@
 const express=require('express')
 const CollectionModel = require('../models/collection')
+const validateCollection = require('../middlewares/validateCollection')
 const UserModel = require('../models/user')
 const verifyToken = require('../middlewares/verifyToken')
 const collections=express.Router()
@@ -104,7 +105,7 @@ collections.get('/:userId/collections', async (req, res) => {
 
 //------------POST--------------------------
 
-collections.post('/:userId/add-collection', async (req, res) => {
+collections.post('/:userId/add-collection', validateCollection, async (req, res) => {
   const { userId } = req.params;
   const {gameTitle,gameCover,developer,publisher,genres,releaseDate,platforms,collCreator} = req.body;
 
