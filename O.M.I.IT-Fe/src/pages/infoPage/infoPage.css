@@ -1,0 +1,13 @@
+.avt{
+    border-radius: 75%;
+    width: 70px;
+    height: 70px  }
+.h1{
+    color: blue;
+}
+.header-container {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    color: blue;
+}
